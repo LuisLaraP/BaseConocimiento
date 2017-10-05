@@ -19,7 +19,7 @@
 %	Padre - Clase de la cual hereda la nueva clase.
 comando(nuevaClase(Nombre, Padre), Base, Base) :-
 	errorNuevaClase(clase(Nombre, Padre, [], []), Base, Mensaje),
-	escribir(['Operación fallida: ' | Mensaje]), !.
+	error(Mensaje), !.
 comando(nuevaClase(Nombre, Padre), Base, NuevaBase) :-
 	agregar(clase(Nombre, Padre, [], []), Base, NuevaBase).
 
@@ -29,7 +29,7 @@ comando(nuevaClase(Nombre, Padre), Base, NuevaBase) :-
 %	Padre - Clase a la cual pertenece el nuevo objeto.
 comando(nuevoObjeto(Nombre, Padre), Base, Base) :-
 	errorNuevoObjeto(objeto([Nombre], Padre, [], []), Base, Mensaje),
-	escribir(['Operación fallida: ' | Mensaje]), !.
+	error(Mensaje), !.
 comando(nuevoObjeto(nil, Padre), Base, NuevaBase) :-
 	agregar(objeto([], Padre, [], []), Base, NuevaBase), !.
 comando(nuevoObjeto(Nombre, Padre), Base, NuevaBase) :-
@@ -44,7 +44,7 @@ comando(nuevoObjeto(Nombre, Padre), Base, NuevaBase) :-
 %	Nombre - Nombre de la clase a eliminar.
 comando(borrarClase(Nombre), Base, Base) :-
 	errorEliminarClase(Nombre, Base, Mensaje),
-	escribir(['Operación fallida: ' | Mensaje]), !.
+	error(Mensaje), !.
 comando(borrarClase(Nombre), Base, NuevaBase) :-
 	buscar(clase(Nombre, Padre, _, _), Base, Clase),
 	clasesHijasDe(Nombre, Base, ClasesHijas),
@@ -58,7 +58,7 @@ comando(borrarClase(Nombre), Base, NuevaBase) :-
 %	Nombre - Nombre de los objetos a eliminar.
 comando(borrarObjeto(Nombre), Base, Base) :-
 	errorEliminarObjeto(Nombre, Base, Mensaje),
-	escribir(['Operación fallida: ' | Mensaje]), !.
+	error(Mensaje), !.
 comando(borrarObjeto(Nombre), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, ListaObjetos),
 	eliminarTodos(ListaObjetos, Base, NuevaBase).

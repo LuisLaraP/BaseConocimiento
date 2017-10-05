@@ -12,6 +12,8 @@
 % Operaciones realizables sobre la base de conocimiento.
 % =============================================================================
 
+:- op(800, xfx, '=>').
+
 % Agregar información ---------------------------------------------------------
 
 errorNuevaClase(clase(_, nil, _, _), Base, Mensaje) :-
@@ -24,6 +26,14 @@ errorNuevaClase(clase(_, Padre, _, _), Base, Mensaje) :-
 errorNuevaClase(clase(Nombre, _, _, _), Base, Mensaje) :-
 	existeClase(Nombre, Base),
 	Mensaje = ['Ya existe la clase ', Nombre, '.'].
+
+errorNuevaPropiedadClase(Nombre, _, Base, Mensaje) :-
+	\+ existeClase(Nombre, Base),
+	Mensaje = ['No se conoce la clase ', Nombre, '.'].
+errorNuevaPropiedadClase(Nombre, Propiedad, Base, Mensaje) :-
+	buscar(clase(Nombre, _, _, _), Base, Clase),
+	claseTienePropiedad(Propiedad, Clase),
+	Mensaje = ['La clase ', Nombre, ' ya tiene la propiedad ', Propiedad].
 
 errorNuevoObjeto(objeto(_, Padre, _, _), Base, Mensaje) :-
 	\+ existeClase(Padre, Base),
@@ -58,13 +68,22 @@ objetosHijosDe(Nombre, Base, Hijos) :-
 
 cambiarPadre(_, [], Base, Base).
 cambiarPadre(Padre, [clase(Nombre, Viejo, Props, Rels)| R], Base, NuevaBase) :-
-	reemplazar(clase(Nombre, Viejo, Props, Rels), clase(Nombre, Padre, Props, Rels), Base, Temp),
+	reemplazar(
+		clase(Nombre, Viejo, Props, Rels),
+		clase(Nombre, Padre, Props, Rels), Base, Temp),
 	cambiarPadre(Padre, R, Temp, NuevaBase).
 cambiarPadre(Padre, [objeto(Nombres, Viejo, Props, Rels)| R], Base, NuevaBase) :-
-	reemplazar(objeto(Nombres, Viejo, Props, Rels), objeto(Nombres, Padre, Props, Rels), Base, Temp),
+	reemplazar(
+		objeto(Nombres, Viejo, Props, Rels),
+		objeto(Nombres, Padre, Props, Rels), Base, Temp),
 	cambiarPadre(Padre, R, Temp, NuevaBase).
 
 claseTienePadre(Padre, clase(_, Padre, _ , _)).
+
+claseTienePropiedad(Propiedad, clase(_, _, Props, _)) :-
+	estaEn(Props, Propiedad).
+claseTienePropiedad(Propiedad, clase(_, _, Props, _)) :-
+	estaEn(Props, Propiedad => _).
 
 % Propiedades de objetos -------------------------------------------------------
 

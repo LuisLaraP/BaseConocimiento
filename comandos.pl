@@ -23,6 +23,17 @@ comando(nuevaClase(Nombre, Padre), Base, Base) :-
 comando(nuevaClase(Nombre, Padre), Base, NuevaBase) :-
 	agregar(clase(Nombre, Padre, [], []), Base, NuevaBase).
 
+comando(nuevaPropClase(Nombre, Propiedad), Base, Base) :-
+	errorNuevaPropiedadClase(Nombre, Propiedad, Base, Mensaje),
+	error(Mensaje), !.
+comando(nuevaPropClase(Nombre, Propiedad), Base, NuevaBase) :-
+	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
+	agregar(Propiedad, Props, NuevasProps),
+	reemplazar(
+		clase(Nombre, Padre, Props, Rels),
+		clase(Nombre, Padre, NuevasProps, Rels),
+		Base, NuevaBase
+	).
 
 % Agrega un nuevo objeto a la base de conocimiento. Versión simple.
 %	Nombre - Identificador para el objeto.

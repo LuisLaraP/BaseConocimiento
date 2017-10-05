@@ -8,7 +8,7 @@
 % Roberto Monroy Argumedo
 % Alejandro Morales Huitrón
 %
-% run.pl
+% main.pl
 % Punto de entrada a la aplicación. Para ejecutar este programa, realizar la
 % consulta 'iniciar.' desde la interfaz de Prolog. O bien, ejecutar el
 % siguiente comando en una terminal:

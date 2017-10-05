@@ -81,8 +81,6 @@ comando(guardar(Ruta), Base, Base) :-
 	put_char(Archivo, .),
 	close(Archivo).
 
+% Imprime todos los objetos actualmente almacenados en la base de conocimiento.
 comando(ver, Base, Base) :-
 	imprimirLista(Base).
-
-comando(prueba(P), Base, Base) :-
-	call(P).

@@ -23,6 +23,10 @@ comando(nuevaClase(Nombre, Padre), Base, Base) :-
 comando(nuevaClase(Nombre, Padre), Base, NuevaBase) :-
 	agregar(clase(Nombre, Padre, [], []), Base, NuevaBase).
 
+% Agrega una nueva propiedad simple al objeto. No puede agregar una pareja
+% propiedad => valor.
+%	Nombre - Nombre de la clase a modificar.
+%	Propiedad - Nombre de la nueva propiedad.
 comando(nuevaPropClase(Nombre, Propiedad), Base, Base) :-
 	errorNuevaPropiedadClase(Nombre, Propiedad, Base, Mensaje),
 	error(Mensaje), !.

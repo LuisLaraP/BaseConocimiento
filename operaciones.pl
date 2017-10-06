@@ -34,6 +34,15 @@ errorNuevaPropiedadClase(Nombre, Propiedad, Base, Mensaje) :-
 	buscar(clase(Nombre, _, _, _), Base, Clase),
 	claseTienePropiedad(Propiedad, Clase),
 	Mensaje = ['La clase ', Nombre, ' ya tiene la propiedad ', Propiedad].
+errorNuevaPropiedadClase(Nombre, not(Propiedad), Base, Mensaje) :-
+	buscar(clase(Nombre, _, _, _), Base, Clase),
+	claseTienePropiedad(Propiedad, Clase),
+	Mensaje = ['La clase ', Nombre, ' ya tiene la propiedad ', Propiedad].
+errorNuevaPropiedadClase(Nombre, Propiedad, Base, Mensaje) :-
+	buscar(clase(Nombre, _, _, _), Base, Clase),
+	claseTienePropiedad(not(Propiedad), Clase),
+	Mensaje = ['La clase ', Nombre, ' ya tiene la propiedad ', Propiedad,
+		' en forma negada'].
 
 errorNuevoObjeto(objeto(_, Padre, _, _), Base, Mensaje) :-
 	\+ existeClase(Padre, Base),

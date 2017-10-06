@@ -25,7 +25,7 @@ comando(nuevaClase(Nombre, Padre), Base, Base) :-
 comando(nuevaClase(Nombre, Padre), Base, NuevaBase) :-
 	agregar(clase(Nombre, Padre, [], []), Base, NuevaBase).
 
-% Agrega una nueva propiedad simple al objeto. No puede agregar una pareja
+% Agrega una nueva propiedad simple a una clase. No puede agregar una pareja
 % propiedad => valor.
 %	Nombre - Nombre de la clase a modificar.
 %	Propiedad - Nombre de la nueva propiedad.
@@ -85,6 +85,15 @@ comando(nuevoObjeto(Nombre, Padre), Base, NuevaBase) :-
 	agregar(objeto(Nombre, Padre, [], []), Base, NuevaBase).
 comando(nuevoObjeto(Nombre, Padre), Base, NuevaBase) :-
 	agregar(objeto([Nombre], Padre, [], []), Base, NuevaBase).
+
+% Agrega una nueva propiedad simple a un objeto. No puede agregar una pareja
+% propiedad => valor.
+%	Nombre - Nombre de la clase a modificar.
+%	Propiedad - Nombre de la nueva propiedad.
+comando(nuevaPropObjeto(Nombre, Propiedad), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	imprimirLista(Objetos),
+	agregarPropiedadObjetos(Objetos, Propiedad, nil, Base, NuevaBase).
 
 % Comandos para eliminar ------------------------------------------------------
 

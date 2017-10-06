@@ -16,6 +16,16 @@
 
 % Agregar información ---------------------------------------------------------
 
+agregarPropiedadObjetos([], _, _, Base, Base).
+agregarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, nil, Base, NBase) :-
+	agregar(Propiedad, Props, NuevasProps), !,
+	reemplazar(objeto(N, P, Props, R), objeto(N, P, NuevasProps, R), Base, Temp),
+	agregarPropiedadObjetos(Rs, Propiedad, nil, Temp, NBase).
+agregarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, Valor, Base, NBase) :-
+	agregar(Propiedad => Valor, Props, NuevasProps), !,
+	reemplazar(objeto(N, P, Props, R), objeto(N, P, NuevasProps, R), Base, Temp),
+	agregarPropiedadObjetos(Rs, Propiedad, Valor, Temp, NBase).
+
 errorNuevaClase(clase(_, nil, _, _), Base, Mensaje) :-
 	buscar(clase(_, nil, _, _), Base, _),
 	Mensaje = ['No puede haber más de una clase raíz.'].

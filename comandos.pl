@@ -12,6 +12,8 @@
 % Contiene los comandos que sirven de interfaz al usuario en el intérprete.
 % =============================================================================
 
+:- op(800, xfx, '=>').
+
 % Comandos para agregar -------------------------------------------------------
 
 % Agrega una nueva clase a la base de conocimiento. Versión simple.
@@ -33,6 +35,22 @@ comando(nuevaPropClase(Nombre, Propiedad), Base, Base) :-
 comando(nuevaPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
 	agregar(Propiedad, Props, NuevasProps),
+	reemplazar(
+		clase(Nombre, Padre, Props, Rels),
+		clase(Nombre, Padre, NuevasProps, Rels),
+		Base, NuevaBase
+	).
+
+% Agrega una nueva pareja propiedad => valor a la clase especificada.
+%	Nombre - Nombre de la clase a modificar.
+%	Propiedad - Nombre de la nueva propiedad.
+%	Valor - Valor de la nueva propiedad.
+comando(nuevaPropClase(Nombre, Propiedad, _), Base, Base) :-
+	errorNuevaPropiedadClase(Nombre, Propiedad, Base, Mensaje),
+	error(Mensaje), !.
+comando(nuevaPropClase(Nombre, Propiedad, Valor), Base, NuevaBase) :-
+	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
+	agregar(Propiedad => Valor, Props, NuevasProps),
 	reemplazar(
 		clase(Nombre, Padre, Props, Rels),
 		clase(Nombre, Padre, NuevasProps, Rels),

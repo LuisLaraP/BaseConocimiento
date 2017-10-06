@@ -42,6 +42,9 @@ comando(nuevaPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 % Elimina la propiedad especificada de la clase.
 %	Nombre - Nombre de la clase a modificar.
 %	Propiedad - Nombre de la propiedad a eliminar.
+comando(borrarPropClase(Nombre, Propiedad), Base, Base) :-
+	errorEliminarPropiedadClase(Nombre, Propiedad, Base, Mensaje),
+	error(Mensaje), !.
 comando(borrarPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
 	eliminar(Propiedad, Props, NuevasProps),

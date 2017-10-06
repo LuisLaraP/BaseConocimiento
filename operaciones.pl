@@ -58,6 +58,11 @@ errorEliminarObjeto(Nombres, Base, Mensaje) :-
 	\+ existeObjeto(Nombres, Base),
 	Mensaje = ['No se conoce ningún objeto llamado ', Nombres, '.'].
 
+errorEliminarPropiedadClase(Nombre, Propiedad, Base, Mensaje) :-
+	buscar(clase(Nombre, _, _, _), Base, Clase),
+	\+ claseTienePropiedad(Propiedad, Clase),
+	Mensaje = ['La clase ', Nombre, ' no tiene la propiedad ', Propiedad, '.'].
+
 % Consultas -------------------------------------------------------------------
 
 clasesHijasDe(Nombre, Base, Hijos) :-

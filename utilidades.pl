@@ -6,7 +6,7 @@
 %
 % Luis Alejandro Lara Patiño
 % Roberto Monroy Argumedo
-% Alejandro Morales Huitrón
+% Alejandro Ehecatl Morales Huitrón
 %
 % utilidades.pl
 % Predicados para realizar operaciones misceláneas.

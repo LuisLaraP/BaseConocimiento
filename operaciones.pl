@@ -70,6 +70,13 @@ errorNuevaPropiedadObjeto(Nombre, Propiedad, Base, Mensaje) :-
 
 % Eliminar información --------------------------------------------------------
 
+eliminarPropiedadObjetos([], _, Base, Base).
+eliminarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, Base, NuevaBase) :-
+	eliminar(Propiedad, Props, T1),
+	eliminar(Propiedad => _, T1, T2),
+	reemplazar(objeto(N, P, Props, R), objeto(N, P, T2, R), Base, Temp),
+	eliminarPropiedadObjetos(Rs, Propiedad, Temp, NuevaBase).
+
 errorEliminarClase(Nombre, Base, Mensaje) :-
 	\+ existeClase(Nombre, Base),
 	Mensaje = ['No se conoce la clase ', Nombre, '.'].

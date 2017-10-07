@@ -6,7 +6,7 @@
 %
 % Luis Alejandro Lara Patiño
 % Roberto Monroy Argumedo
-% Alejandro Morales Huitrón
+% Alejandro Ehecatl Morales Huitrón
 %
 % main.pl
 % Punto de entrada a la aplicación. Para ejecutar este programa, realizar la

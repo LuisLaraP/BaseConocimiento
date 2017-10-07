@@ -2,11 +2,11 @@
 % Universidad Nacional Autónoma de México
 % Inteligencia Artificial
 %
-% Proyecto 1 - Representación del comocimiento
+% Proyecto 1 - Representación del conocimiento
 %
 % Luis Alejandro Lara Patiño
 % Roberto Monroy Argumedo
-% Alejandro Morales Huitrón
+% Alejandro Ehecatl Morales Huitrón
 %
 % listas.pl
 % Predicados para realizar operaciones sobre listas.
@@ -102,3 +102,8 @@ reemplazar(Original, Nuevo, [Original | R], [Nuevo | NuevaCola]) :-
 	reemplazar(Original, Nuevo, R, NuevaCola), !.
 reemplazar(Original, Nuevo, [C | R], [C | NuevaCola]) :-
 	reemplazar(Original, Nuevo, R, NuevaCola), !.
+	
+
+%concatena dos listas
+concatena([],L,L).
+concatena([H|L1],L2,[H|L3]):- concatena(L1,L2,L3).

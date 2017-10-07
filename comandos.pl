@@ -90,9 +90,11 @@ comando(nuevoObjeto(Nombre, Padre), Base, NuevaBase) :-
 % propiedad => valor.
 %	Nombre - Nombre de la clase a modificar.
 %	Propiedad - Nombre de la nueva propiedad.
+comando(nuevaPropObjeto(Nombre, Propiedad), Base, Base) :-
+	errorNuevaPropiedadObjeto(Nombre, Propiedad, Base, Mensaje),
+	error(Mensaje), !.
 comando(nuevaPropObjeto(Nombre, Propiedad), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
-	imprimirLista(Objetos),
 	agregarPropiedadObjetos(Objetos, Propiedad, nil, Base, NuevaBase).
 
 % Comandos para eliminar ------------------------------------------------------

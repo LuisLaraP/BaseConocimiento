@@ -58,6 +58,16 @@ errorNuevoObjeto(objeto(_, Padre, _, _), Base, Mensaje) :-
 	\+ existeClase(Padre, Base),
 	Mensaje = ['No se conoce la clase ', Padre, '.'].
 
+errorNuevaPropiedadObjeto(Nombre, _, Base, Mensaje) :-
+	\+ existeObjeto(Nombre, Base),
+	Mensaje = ['No se conoce el objeto ', Nombre, '.'].
+errorNuevaPropiedadObjeto(Nombre, Propiedad, Base, Mensaje) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	filtrar(objetoTienePropiedad(Propiedad), Objetos, Filtrada),
+	Filtrada \= [],
+	Mensaje = ['Los siguientes objetos ya tienen la propiedad ', Propiedad,
+		': ', Filtrada].
+
 % Eliminar información --------------------------------------------------------
 
 errorEliminarClase(Nombre, Base, Mensaje) :-
@@ -118,3 +128,8 @@ objetoSeLlama(Nombre, objeto(ListaNombres, _, _, _)) :-
 	estaEn(ListaNombres, Nombre).
 
 objetoTienePadre(Padre, objeto(_, Padre, _, _)).
+
+objetoTienePropiedad(Propiedad, objeto(_, _, Props, _)) :-
+	estaEn(Props, Propiedad).
+objetoTienePropiedad(Propiedad, objeto(_, _, Props, _)) :-
+	estaEn(Props, Propiedad => _).

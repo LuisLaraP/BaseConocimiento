@@ -6,7 +6,7 @@
 %
 % Luis Alejandro Lara Patiño
 % Roberto Monroy Argumedo
-% Alejandro Morales Huitrón
+% Alejandro Ehecatl Morales Huitrón
 %
 % interprete.pl
 % Intérprete de comandos básico implementado en Prolog. Permite realizar

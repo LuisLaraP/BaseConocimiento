@@ -97,6 +97,17 @@ comando(nuevaPropObjeto(Nombre, Propiedad), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
 	agregarPropiedadObjetos(Objetos, Propiedad, nil, Base, NuevaBase).
 
+% Agrega una nueva pareja propiedad => valor a la clase especificada.
+%	Nombre - Nombre de la clase a modificar.
+%	Propiedad - Nombre de la nueva propiedad.
+%	Valor - Valor de la nueva propiedad.
+comando(nuevaPropObjeto(Nombre, Propiedad), Base, Base) :-
+	errorNuevaPropiedadObjeto(Nombre, Propiedad, Base, Mensaje),
+	error(Mensaje), !.
+comando(nuevaPropObjeto(Nombre, Propiedad, Valor), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	agregarPropiedadObjetos(Objetos, Propiedad, Valor, Base, NuevaBase).
+
 % Comandos para eliminar ------------------------------------------------------
 
 % Elimina de la base de conocimiento la clase con el nombre dado.

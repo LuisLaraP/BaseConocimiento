@@ -57,21 +57,6 @@ comando(nuevaPropClase(Nombre, Propiedad, Valor), Base, NuevaBase) :-
 		Base, NuevaBase
 	).
 
-% Elimina la propiedad especificada de la clase.
-%	Nombre - Nombre de la clase a modificar.
-%	Propiedad - Nombre de la propiedad a eliminar.
-comando(borrarPropClase(Nombre, Propiedad), Base, Base) :-
-	errorEliminarPropiedadClase(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje), !.
-comando(borrarPropClase(Nombre, Propiedad), Base, NuevaBase) :-
-	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
-	eliminar(Propiedad, Props, NuevasProps),
-	reemplazar(
-		clase(Nombre, Padre, Props, Rels),
-		clase(Nombre, Padre, NuevasProps, Rels),
-		Base, NuevaBase
-	).
-
 % Agrega un nuevo objeto a la base de conocimiento. Versión simple.
 %	Nombre - Identificador para el objeto.
 %	Padre - Clase a la cual pertenece el nuevo objeto.
@@ -122,6 +107,21 @@ comando(borrarClase(Nombre), Base, NuevaBase) :-
 	objetosHijosDe(Nombre, Base, ObjetosHijos),
 	cambiarPadre(Padre, ObjetosHijos, Temp1, Temp2),
 	eliminar(Clase, Temp2, NuevaBase).
+
+% Elimina la propiedad especificada de la clase.
+%	Nombre - Nombre de la clase a modificar.
+%	Propiedad - Nombre de la propiedad a eliminar.
+comando(borrarPropClase(Nombre, Propiedad), Base, Base) :-
+	errorEliminarPropiedadClase(Nombre, Propiedad, Base, Mensaje),
+	error(Mensaje), !.
+comando(borrarPropClase(Nombre, Propiedad), Base, NuevaBase) :-
+	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
+	eliminar(Propiedad, Props, NuevasProps),
+	reemplazar(
+		clase(Nombre, Padre, Props, Rels),
+		clase(Nombre, Padre, NuevasProps, Rels),
+		Base, NuevaBase
+	).
 
 % Elimina de la base de conocimiento todos los objetos que tengan el nombre
 % dado.

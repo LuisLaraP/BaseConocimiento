@@ -103,6 +103,10 @@ comando(nuevaPropObjeto(Nombre, Propiedad, Valor), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
 	agregarPropiedadObjetos(Objetos, Propiedad, Valor, Base, NuevaBase).
 
+% Agrega una nueva relacion a todos los objetos con el nombre especificado.
+%	Nombre - Nombre del objeto a modificar.
+%	Relacion - Nombre de la nueva relación.
+%	Objetivo - Entidad con la cual establecer la relación.
 comando(nuevaRelObjeto(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
 	agregarRelacionObjetos(Objetos, Relacion, Objetivo, Base, NuevaBase).

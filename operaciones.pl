@@ -104,6 +104,9 @@ verificarNuevaRelacionObjeto(Nombre, Relacion, Objetivo, Base) :-
 	advertencia(['Los siguientes objetos ya tienen la relación ', Relacion,
 		' con ', Objetivo, ':']),
 	imprimirLista(Filtrada).
+verificarNuevaRelacionObjeto(_, _, Objetivo, Base) :-
+	\+ existeEntidad(Objetivo, Base),
+	error(['No se conoce la clase o el objeto ', Objetivo, '.']), !, fail.
 verificarNuevaRelacionObjeto(_, _, _, _).
 
 % Eliminar información --------------------------------------------------------

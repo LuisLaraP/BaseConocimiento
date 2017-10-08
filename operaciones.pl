@@ -64,6 +64,9 @@ verificarNuevaRelacionClase(Nombre, Relacion, _, Base) :-
 	claseTieneRelacion(Relacion, Obj, Clase),
 	error(['La clase ', Nombre, ' ya tiene la relacion ', Relacion, ' con ',
 		Obj, '.']), !, fail.
+verificarNuevaRelacionClase(_, _, Objetivo, Base) :-
+	\+ existeEntidad(Objetivo, Base),
+	error(['No se conoce la clase o el objeto ', Objetivo, '.']), !, fail.
 verificarNuevaRelacionClase(_, _, _, _).
 
 verificarNuevoObjeto(objeto(_, Padre, _, _), Base) :-
@@ -133,6 +136,11 @@ existeClase(Nombre, Base) :-
 existeObjeto(Nombre, Base) :-
 	filtrar(objetoSeLlama(Nombre), Base, Resultado),
 	Resultado \= [].
+
+existeEntidad(Nombre, Base) :-
+	existeClase(Nombre, Base).
+existeEntidad(Nombre, Base) :-
+	existeObjeto(Nombre, Base).
 
 objetosHijosDe(Nombre, Base, Hijos) :-
 	filtrar(objetoTienePadre(Nombre), Base, Hijos).

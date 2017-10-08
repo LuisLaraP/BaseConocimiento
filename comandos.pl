@@ -39,6 +39,15 @@ comando(nuevaPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 		Base, NuevaBase
 	).
 
+comando(nuevaRelClase(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
+	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
+	agregar(Relacion => Objetivo, Rels, NRels),
+	reemplazar(
+		clase(Nombre, Padre, Props, Rels),
+		clase(Nombre, Padre, Props, NRels),
+		Base, NuevaBase
+	).
+
 % Agrega una nueva pareja propiedad => valor a la clase especificada.
 %	Nombre - Nombre de la clase a modificar.
 %	Propiedad - Nombre de la nueva propiedad.

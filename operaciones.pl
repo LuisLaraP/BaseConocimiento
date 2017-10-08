@@ -59,11 +59,11 @@ verificarNuevaPropiedadClase(_, _, _).
 verificarNuevaRelacionClase(Nombre, _, _, Base) :-
 	\+ existeClase(Nombre, Base),
 	error(['No se conoce la clase ', Nombre, '.']), !, fail.
-verificarNuevaRelacionClase(Nombre, Relacion, _, Base) :-
+verificarNuevaRelacionClase(Nombre, Relacion, Objetivo, Base) :-
 	buscar(clase(Nombre, _, _, _), Base, Clase),
-	claseTieneRelacion(Relacion, Obj, Clase),
+	claseTieneRelacion(Relacion, Objetivo, Clase),
 	error(['La clase ', Nombre, ' ya tiene la relacion ', Relacion, ' con ',
-		Obj, '.']), !, fail.
+		Objetivo, '.']), !, fail.
 verificarNuevaRelacionClase(_, _, Objetivo, Base) :-
 	\+ existeEntidad(Objetivo, Base),
 	error(['No se conoce la clase o el objeto ', Objetivo, '.']), !, fail.

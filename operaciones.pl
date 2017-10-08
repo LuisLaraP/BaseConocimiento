@@ -108,8 +108,8 @@ verificarEliminarPropiedadObjeto(Nombre, Propiedad, Base) :-
 	filtrar(objetoTienePropiedad(Propiedad), Objetos, Filtrada),
 	Filtrada \= Objetos,
 	restar(Objetos, Filtrada, SinProp),
-	error(['Los siguientes objetos no tienen la propiedad ', Propiedad, ': ']),
-	imprimirLista(SinProp), !, fail.
+	advertencia(['Los siguientes objetos no tienen la propiedad ', Propiedad, ': ']),
+	imprimirLista(SinProp).
 verificarEliminarPropiedadObjeto(_, _, _).
 
 % Consultas -------------------------------------------------------------------

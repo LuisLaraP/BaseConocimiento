@@ -20,9 +20,8 @@
 %	Nombre - Nombre de la clase.
 %	Padre - Clase de la cual hereda la nueva clase.
 comando(nuevaClase(Nombre, Padre), Base, Base) :-
-	errorNuevaClase(clase(Nombre, Padre, [], []), Base, Mensaje),
-	error(Mensaje), !.
-comando(nuevaClase(Nombre, Padre), Base, NuevaBase) :-
+	\+ verificarNuevaClase(clase(Nombre, Padre, [], []), Base).
+comando(nuevaClase(Nombre, Padre), Base, NuevaBase) :- !,
 	agregar(clase(Nombre, Padre, [], []), Base, NuevaBase).
 
 % Agrega una nueva propiedad simple a una clase. No puede agregar una pareja
@@ -30,8 +29,7 @@ comando(nuevaClase(Nombre, Padre), Base, NuevaBase) :-
 %	Nombre - Nombre de la clase a modificar.
 %	Propiedad - Nombre de la nueva propiedad.
 comando(nuevaPropClase(Nombre, Propiedad), Base, Base) :-
-	errorNuevaPropiedadClase(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarNuevaPropiedadClase(Nombre, Propiedad, Base).
 comando(nuevaPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
 	agregar(Propiedad, Props, NuevasProps),
@@ -46,8 +44,7 @@ comando(nuevaPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 %	Propiedad - Nombre de la nueva propiedad.
 %	Valor - Valor de la nueva propiedad.
 comando(nuevaPropClase(Nombre, Propiedad, _), Base, Base) :-
-	errorNuevaPropiedadClase(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarNuevaPropiedadClase(Nombre, Propiedad, Base).
 comando(nuevaPropClase(Nombre, Propiedad, Valor), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
 	agregar(Propiedad => Valor, Props, NuevasProps),
@@ -61,8 +58,7 @@ comando(nuevaPropClase(Nombre, Propiedad, Valor), Base, NuevaBase) :-
 %	Nombre - Identificador para el objeto.
 %	Padre - Clase a la cual pertenece el nuevo objeto.
 comando(nuevoObjeto(Nombre, Padre), Base, Base) :-
-	errorNuevoObjeto(objeto([Nombre], Padre, [], []), Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarNuevoObjeto(objeto([Nombre], Padre, [], []), Base).
 comando(nuevoObjeto(nil, Padre), Base, NuevaBase) :-
 	agregar(objeto([], Padre, [], []), Base, NuevaBase), !.
 comando(nuevoObjeto(Nombre, Padre), Base, NuevaBase) :-
@@ -76,8 +72,7 @@ comando(nuevoObjeto(Nombre, Padre), Base, NuevaBase) :-
 %	Nombre - Nombre de la clase a modificar.
 %	Propiedad - Nombre de la nueva propiedad.
 comando(nuevaPropObjeto(Nombre, Propiedad), Base, Base) :-
-	errorNuevaPropiedadObjeto(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarNuevaPropiedadObjeto(Nombre, Propiedad, Base).
 comando(nuevaPropObjeto(Nombre, Propiedad), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
 	agregarPropiedadObjetos(Objetos, Propiedad, nil, Base, NuevaBase).
@@ -98,8 +93,7 @@ comando(nuevaPropObjeto(Nombre, Propiedad, Valor), Base, NuevaBase) :-
 % Elimina de la base de conocimiento la clase con el nombre dado.
 %	Nombre - Nombre de la clase a eliminar.
 comando(borrarClase(Nombre), Base, Base) :-
-	errorEliminarClase(Nombre, Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarEliminarClase(Nombre, Base).
 comando(borrarClase(Nombre), Base, NuevaBase) :-
 	buscar(clase(Nombre, Padre, _, _), Base, Clase),
 	clasesHijasDe(Nombre, Base, ClasesHijas),
@@ -112,8 +106,7 @@ comando(borrarClase(Nombre), Base, NuevaBase) :-
 %	Nombre - Nombre de la clase a modificar.
 %	Propiedad - Nombre de la propiedad a eliminar.
 comando(borrarPropClase(Nombre, Propiedad), Base, Base) :-
-	errorEliminarPropiedadClase(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarEliminarPropiedadClase(Nombre, Propiedad, Base).
 comando(borrarPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
 	eliminar(Propiedad, Props, NuevasProps),
@@ -127,8 +120,7 @@ comando(borrarPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 % dado.
 %	Nombre - Nombre de los objetos a eliminar.
 comando(borrarObjeto(Nombre), Base, Base) :-
-	errorEliminarObjeto(Nombre, Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarEliminarObjeto(Nombre, Base).
 comando(borrarObjeto(Nombre), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, ListaObjetos),
 	eliminarTodos(ListaObjetos, Base, NuevaBase).
@@ -137,8 +129,7 @@ comando(borrarObjeto(Nombre), Base, NuevaBase) :-
 %	Nombre - Nombre del objeto a modificar.
 %	Propiedad - Nombre de la propiedad a eliminar.
 comando(borrarPropObjeto(Nombre, Propiedad), Base, Base) :-
-	errorEliminarPropiedadObjeto(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje).
+	\+ verificarEliminarPropiedadObjeto(Nombre, Propiedad, Base).
 comando(borrarPropObjeto(Nombre, Propiedad), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
 	eliminarPropiedadObjetos(Objetos, Propiedad, Base, NuevaBase).

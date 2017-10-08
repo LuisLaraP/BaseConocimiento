@@ -26,6 +26,12 @@ agregarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, Valor, Base, N
 	reemplazar(objeto(N, P, Props, R), objeto(N, P, NuevasProps, R), Base, Temp),
 	agregarPropiedadObjetos(Rs, Propiedad, Valor, Temp, NBase).
 
+agregarRelacionObjetos([], _, _, Base, Base).
+agregarRelacionObjetos([objeto(N, P, Props, Rels) | R], Rel, Obj, Base, NBase) :-
+	agregar(Rel => Obj, Rels, NuevasRels), !,
+	reemplazar(objeto(N, P, Props, Rels), objeto(N, P, Props, NuevasRels), Base, Temp),
+	agregarRelacionObjetos(R, Rel, Obj, Temp, NBase).
+
 verificarNuevaClase(clase(_, nil, _, _), Base) :-
 	buscar(clase(_, nil, _, _), Base, _),
 	error(['No puede haber más de una clase raíz.']), !, fail.

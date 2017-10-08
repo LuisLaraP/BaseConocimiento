@@ -103,6 +103,10 @@ comando(nuevaPropObjeto(Nombre, Propiedad, Valor), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
 	agregarPropiedadObjetos(Objetos, Propiedad, Valor, Base, NuevaBase).
 
+comando(nuevaRelObjeto(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	agregarRelacionObjetos(Objetos, Relacion, Objetivo, Base, NuevaBase).
+
 % Comandos para eliminar ------------------------------------------------------
 
 % Elimina de la base de conocimiento la clase con el nombre dado.

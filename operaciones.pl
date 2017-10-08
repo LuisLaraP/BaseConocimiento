@@ -56,6 +56,16 @@ verificarNuevaPropiedadClase(Nombre, Propiedad, Base) :-
 		' en forma negada']), !, fail.
 verificarNuevaPropiedadClase(_, _, _).
 
+verificarNuevaRelacionClase(Nombre, _, _, Base) :-
+	\+ existeClase(Nombre, Base),
+	error(['No se conoce la clase ', Nombre, '.']), !, fail.
+verificarNuevaRelacionClase(Nombre, Relacion, _, Base) :-
+	buscar(clase(Nombre, _, _, _), Base, Clase),
+	claseTieneRelacion(Relacion, Obj, Clase),
+	error(['La clase ', Nombre, ' ya tiene la relacion ', Relacion, ' con ',
+		Obj, '.']), !, fail.
+verificarNuevaRelacionClase(_, _, _, _).
+
 verificarNuevoObjeto(objeto(_, Padre, _, _), Base) :-
 	\+ existeClase(Padre, Base),
 	error(['No se conoce la clase ', Padre, '.']), !, fail.
@@ -162,3 +172,8 @@ objetoTienePropiedad(Propiedad, objeto(_, _, Props, _)) :-
 	estaEn(Props, Propiedad).
 objetoTienePropiedad(Propiedad, objeto(_, _, Props, _)) :-
 	estaEn(Props, Propiedad => _).
+
+% Relaciones de clases --------------------------------------------------------
+
+claseTieneRelacion(Relacion, Objetivo, clase(_, _, _, Rels)) :-
+	estaEn(Rels, Relacion => Objetivo).

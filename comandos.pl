@@ -39,6 +39,12 @@ comando(nuevaPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 		Base, NuevaBase
 	).
 
+% Agrega una nueva relacion a la clase especificada.
+%	Nombre - Nombre de la clase a modificar.
+%	Relacion - Nombre de la nueva relación.
+%	Objetivo - Entidad con la cual establecer la relación.
+comando(nuevaRelClase(Nombre, Relacion, Objetivo), Base, Base) :-
+	\+ verificarNuevaRelacionClase(Nombre, Relacion, Objetivo, Base).
 comando(nuevaRelClase(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
 	agregar(Relacion => Objetivo, Rels, NRels),

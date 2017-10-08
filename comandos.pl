@@ -136,6 +136,9 @@ comando(borrarObjeto(Nombre), Base, NuevaBase) :-
 % Elimina la propiedad especificada de todos los objetos con el nombre dado.
 %	Nombre - Nombre del objeto a modificar.
 %	Propiedad - Nombre de la propiedad a eliminar.
+comando(borrarPropObjeto(Nombre, Propiedad), Base, Base) :-
+	errorEliminarPropiedadObjeto(Nombre, Propiedad, Base, Mensaje),
+	error(Mensaje).
 comando(borrarPropObjeto(Nombre, Propiedad), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
 	eliminarPropiedadObjetos(Objetos, Propiedad, Base, NuevaBase).

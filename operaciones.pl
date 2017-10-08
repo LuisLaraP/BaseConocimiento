@@ -93,6 +93,17 @@ errorEliminarPropiedadClase(Nombre, Propiedad, Base, Mensaje) :-
 	\+ claseTienePropiedad(Propiedad, Clase),
 	Mensaje = ['La clase ', Nombre, ' no tiene la propiedad ', Propiedad, '.'].
 
+errorEliminarPropiedadObjeto(Nombre, _, Base, Mensaje) :-
+	\+ existeObjeto(Nombre, Base),
+	Mensaje = ['No se conoce ningún objeto llamado ', Nombre, '.'].
+errorEliminarPropiedadObjeto(Nombre, Propiedad, Base, Mensaje) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	filtrar(objetoTienePropiedad(Propiedad), Objetos, Filtrada),
+	Filtrada \= Objetos,
+	restar(Objetos, Filtrada, SinProp),
+	Mensaje = ['Los siguientes objetos no tienen la propiedad ', Propiedad, ': ',
+		SinProp].
+
 % Consultas -------------------------------------------------------------------
 
 clasesHijasDe(Nombre, Base, Hijos) :-

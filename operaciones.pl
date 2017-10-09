@@ -235,9 +235,44 @@ eProp(Prop,KB,L) :-
 	listPropClas(Prop,KB,R2),
 	propHer(KB,R2,R3),
 	concatena(R1,R3,L).
+	
+% Extensión de una relación--------------------------------
+
+% Obtiene la lista de clases que cumplen una relación
+listRelClas(_,[],[]).
+listRelClas(Rel,[clase(Nom,_,_,L)|TB],LR) :-
+	listRelAux(Rel,Nom,L,S),
+        concatena(S,TR,LR),
+	listRelClas(Rel,TB,TR),!.
+listRelClas(Rel,[_|TB],LR) :-
+	listRelClas(Rel,TB,LR).
+
+% Obtinene la lista de objetos que cumplen una relación
+listRelObj(_,[],[]).
+listRelObj(Rel,[objeto(Nom,_,_,L)|TB],LR) :-
+	listRelAux(Rel,Nom,L,S),
+        concatena(S,TR,LR),
+	listRelObj(Rel,TB,TR),!.
+listRelObj(Rel,[_|TB],LR) :-
+	listRelObj(Rel,TB,LR).
+
+% Verifica si una clase u objeto en particular tiene una relación
+listRelAux(_,_,[],[]).
+listRelAux(Rel,Nom,[Rel=>X|T],[Nom:X|R]) :-
+	listPropAux(Rel,Nom,T,R),!.
+listRelAux(Rel,Nom,[no(Rel=>X)|T],[no(Nom:X)|R]) :-
+	listPropAux(Rel,Nom,T,R),!.
+listRelAux(Rel,Nom,[_|T],R) :-
+	listPropAux(Rel,Nom,T,R),!.
+
+eRel(Rel,KB,L) :-
+	listRelObj(Rel,KB,R1),
+	listRelClas(Rel,KB,R2),
+	propHer(KB,R2,R3),
+	concatena(R1,R3,L).
 
 
-% Clases a las que pertenece un objeto
+% Clases a las que pertenece un objeto-----------------------------
 
 
 % Listados de propiedades y relaciones

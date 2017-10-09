@@ -145,6 +145,8 @@ comando(borrarPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 %	Nombre - Nombre de la clase a modificar.
 %	Relacion - Nombre de la relación a eliminar.
 %	Objetivo - Entidad con la cual se quiere eliminar la relación.
+comando(borrarRelClase(Nombre, Relacion, Objetivo), Base, Base) :-
+	\+ verificarEliminarRelacionClase(Nombre, Relacion, Objetivo, Base).
 comando(borrarRelClase(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
 	eliminar(Relacion => Objetivo, Rels, NRels),

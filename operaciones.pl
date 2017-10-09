@@ -149,6 +149,16 @@ verificarEliminarPropiedadObjeto(Nombre, Propiedad, Base) :-
 	imprimirLista(SinProp).
 verificarEliminarPropiedadObjeto(_, _, _).
 
+verificarEliminarRelacionClase(Nombre, _, _, Base) :-
+	\+ existeClase(Nombre, Base),
+	error(['No se conoce la clase ', Nombre, '.']), !, fail.
+verificarEliminarRelacionClase(Nombre, Relacion, Objetivo, Base) :-
+	buscar(clase(Nombre, _, _, _), Base, clase(_, _, _, Rels)),
+	\+ estaEn(Rels, Relacion => Objetivo),
+	error(['La clase ', Nombre, ' no tiene la relación ', Relacion, ' con ',
+		Objetivo]), !, fail.
+verificarEliminarRelacionClase(_, _, _, _).
+
 % Consultas -------------------------------------------------------------------
 
 clasesHijasDe(Nombre, Base, Hijos) :-

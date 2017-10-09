@@ -181,7 +181,7 @@ listPropClas(_,[],[]).
 listPropClas(Prop,[clase(Nom,_,L,_)|TB],LR) :-
 	listPropAux(Prop,Nom,L,S),
         concatena(S,TR,LR),
-	listPropClas(Prop,TB,TR),!..
+	listPropClas(Prop,TB,TR),!.
 listPropClas(Prop,[_|TB],LR) :-
 	listPropClas(Prop,TB,LR).
 

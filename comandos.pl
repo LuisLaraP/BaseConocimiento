@@ -179,6 +179,8 @@ comando(borrarPropObjeto(Nombre, Propiedad), Base, NuevaBase) :-
 %	Relacion - Nombre de la relación a eliminar.
 %	Objetivo - Nombre de la entidad con la cual está establecida la relación a
 %		eliminar.
+comando(borrarRelObjeto(Nombre, Relacion, Objetivo), Base, Base) :-
+	\+ verificarEliminarRelacionObjeto(Nombre, Relacion, Objetivo, Base).
 comando(borrarRelObjeto(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
 	eliminarRelacionObjetos(Objetos, Relacion, Objetivo, Base, NuevaBase).

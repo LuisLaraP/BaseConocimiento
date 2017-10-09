@@ -165,6 +165,19 @@ verificarEliminarRelacionClase(Nombre, Relacion, Objetivo, Base) :-
 		Objetivo]), !, fail.
 verificarEliminarRelacionClase(_, _, _, _).
 
+verificarEliminarRelacionObjeto(Nombre, _, _, Base) :-
+	\+ existeObjeto(Nombre, Base),
+	error(['No se conoce ningún objeto llamado ', Nombre, '.']), !, fail.
+verificarEliminarRelacionObjeto(Nombre, Relacion, Objetivo, Base) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	filtrar(objetoTieneRelacion(Relacion, Objetivo), Objetos, Filtrada),
+	Filtrada \= Objetos,
+	restar(Objetos, Filtrada, SinRel),
+	advertencia(['Los siguientes objetos no tienen la relación ', Relacion,
+		' con ', Objetivo, ':']),
+	imprimirLista(SinRel).
+verificarEliminarRelacionObjeto(_, _, _, _).
+
 % Consultas -------------------------------------------------------------------
 
 clasesHijasDe(Nombre, Base, Hijos) :-

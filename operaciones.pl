@@ -236,7 +236,7 @@ eProp(Prop,KB,L) :-
 	propHer(KB,R2,R3),
 	concatena(R1,R3,L).
 	
-% Extensión de una relación--------------------------------
+% Extensión de una relación-----------------------------------
 
 % Obtiene la lista de clases que cumplen una relación
 listRelClas(_,[],[]).
@@ -274,8 +274,17 @@ eRel(Rel,KB,L) :-
 
 % Clases a las que pertenece un objeto-----------------------------
 
+% Devuelve el camino de ancestros de un objeto hasta la raíz (top)
+clasesObjeto(objeto(_,Clase,_,_),KB,R):-
+	buscar(clase(Clase,_,_,_),KB,Linea),
+	buscaAncestros(Linea,KB,R).
 
-% Listados de propiedades y relaciones
+buscaAncestros(clase(top,_,_,_),_,[top]).
+buscaAncestros(clase(Clase,Ancestro,_,_),KB,[Clase|R]):-
+	buscar(clase(Ancestro,_,_,_),KB,B),!,
+	buscaAncestros(B,KB,R).
+
+% Listados de propiedades y relaciones-------------------------------
 
 propiedadesObjeto(objeto(_,_,Props,_),Props).
 

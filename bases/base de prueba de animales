@@ -13,8 +13,9 @@ objeto(pete,aguilas,[tamano=>largo],[amigo=>arturo]),
 objeto(arturo,pinguinos,[listo],[amigo=>pete]),
 objeto(leo,aguilas,[],[]),
 objeto(tweezy,pinguinos,[alegre,bizarro,valiente],[]),
-objeto(plats,ornitorrincos,[color=>negro],[]),
+objeto(plats,ornitorrincos,[],[]),
 objeto(juan,lemures,[],[]),
 objeto(joe,chimpances,[],[]),
-objeto(pedro,primates,[],[])
+objeto(pedro,primates,[],[]),
+objeto(george,mamiferos,[],[])
 ].

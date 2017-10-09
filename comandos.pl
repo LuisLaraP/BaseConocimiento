@@ -169,8 +169,14 @@ comando(extProp(Propiedad),Base,Base) :-
 	write(R),nl.
 
 % Extensión de una relación
-comando(extRel(Propiedad),Base,Base) :-
-	eRel(Propiedad,Base,R),
+comando(extRel(Relacion),Base,Base) :-
+	eRel(Relacion,Base,R),
+	write(R),nl.
+	
+% Clases a las que pertenece un objeto 
+comando(clasesObj(Objeto),Base,Base) :-
+	buscar(objeto(Objeto,_,_,_),Base,Ob),
+	clasesObjeto(Ob,Base,R),
 	write(R),nl.
 
 % Propiedades de un objeto

@@ -107,3 +107,47 @@ reemplazar(Original, Nuevo, [C | R], [C | NuevaCola]) :-
 %concatena dos listas
 concatena([],L,L).
 concatena([H|L1],L2,[H|L3]):- concatena(L1,L2,L3).
+
+ponSi([],[]).
+ponSi([H|T],[H:si|C]):-
+    ponSi(T,C),!.
+
+ponNo([],[]).
+ponNo([H|T],[H:no|C]):-
+    ponNo(T,C),!.
+
+ponClase([],_,[]).
+ponClase([H|T],X,[H:X|C]):-
+    ponClase(T,X,C),!.
+
+ponClaseNo([],_,[]).
+ponClaseNo([H|T],X,[no(H:X)|C]):-
+    ponClaseNo(T,X,C),!.
+
+cambia(_,[],[]).
+cambia(X:si,[X:no|T],[X:si|F]):-
+	cambia(X:si,T,F),!.
+cambia(X:si,[B|T],[B|F]):-
+	cambia(X:si,T,F),!.
+
+cambia(X:no,[X:si|T],[X:no|F]):-
+	cambia(X:no,T,F),!.
+cambia(X:no,[B|T],[B|F]):-
+	cambia(X:no,T,F),!.
+
+cambia(X:Y,[no(X:Y)|T],[X:Y|F]):-
+	cambia(X:Y,T,F),!.
+cambia(X:Y,[X:_|T],[X:Y|F]):-
+	cambia(X:Y,T,F),!.
+cambia(X:Y,[B|T],[B|F]):-
+	cambia(X:Y,T,F),!.
+
+cambia(no(X:Y),[X:Y|T],[no(X:Y)|F]):-
+	cambia(no(X:Y),T,F),!.
+cambia(no(X:Y),[B|T],[B|F]):-
+	cambia(no(X:Y),T,F),!.
+
+actualiza([],L,L).
+actualiza([X|T],L,F) :-
+	cambia(X,L,R),
+	actualiza(T,R,F),!.

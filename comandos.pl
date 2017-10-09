@@ -168,6 +168,11 @@ comando(extProp(Propiedad),Base,Base) :-
 	eProp(Propiedad,Base,R),
 	write(R),nl.
 
+% Extensión de una relación
+comando(extRel(Propiedad),Base,Base) :-
+	eRel(Propiedad,Base,R),
+	write(R),nl.
+
 % Propiedades de un objeto
 comando(propsObjeto(Objeto),Base,Base) :-
 	buscar(objeto(Objeto,_,_,_),Base,Ob),

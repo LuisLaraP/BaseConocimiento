@@ -118,6 +118,12 @@ eliminarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, Base, NuevaBa
 	reemplazar(objeto(N, P, Props, R), objeto(N, P, T2, R), Base, Temp),
 	eliminarPropiedadObjetos(Rs, Propiedad, Temp, NuevaBase).
 
+eliminarRelacionObjetos([], _, _, Base, Base).
+eliminarRelacionObjetos([objeto(N, P, Props, R) | Rs], Relacion, Objetivo, Base, NuevaBase) :-
+	eliminar(Relacion => Objetivo, R, NR),
+	reemplazar(objeto(N, P, Props, R), objeto(N, P, Props, NR), Base, Temp),
+	eliminarRelacionObjetos(Rs, Relacion, Objetivo, Temp, NuevaBase).
+
 verificarEliminarClase(Nombre, Base) :-
 	\+ existeClase(Nombre, Base),
 	error(['No se conoce la clase ', Nombre, '.']), !, fail.

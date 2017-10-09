@@ -181,7 +181,7 @@ listPropClas(_,[],[]).
 listPropClas(Prop,[clase(Nom,_,L,_)|TB],LR) :-
 	listPropAux(Prop,Nom,L,S),
         concatena(S,TR,LR),
-	listPropClas(Prop,TB,TR).
+	listPropClas(Prop,TB,TR),!..
 listPropClas(Prop,[_|TB],LR) :-
 	listPropClas(Prop,TB,LR).
 
@@ -190,7 +190,7 @@ listPropObj(_,[],[]).
 listPropObj(Prop,[objeto(Nom,_,L,_)|TB],LR) :-
 	listPropAux(Prop,Nom,L,S),
         concatena(S,TR,LR),
-	listPropObj(Prop,TB,TR).
+	listPropObj(Prop,TB,TR),!.
 listPropObj(Prop,[_|TB],LR) :-
 	listPropObj(Prop,TB,LR).
 
@@ -205,42 +205,36 @@ listPropAux(Prop,Nom,[Prop=>X|T],[Nom:X|R]) :-
 listPropAux(Prop,Nom,[no(Prop=>X)|T],[no(Nom:X)|R]) :-
 	listPropAux(Prop,Nom,T,R),!.
 listPropAux(Prop,Nom,[_|T],R) :-
-	listPropAux(Prop,Nom,T,R).
+	listPropAux(Prop,Nom,T,R),!.
 
 % Revisa las clases que cumplen una propiedad bajo herencia
-propHer(Prop,KB,[],[]).
+propHer(_,[],[]).
 propHer(KB,[Clase:si|R],L) :-
        extensionClase(Clase,KB,S),
        ponSi(S,S1),
        propHer(KB,R,P),
-       concatena(S1,P,P1),
-       verifica(P1,L).
+       actualiza(P,S1,L),!.
 propHer(KB,[Clase:no|R],L) :-
        extensionClase(Clase,KB,S),
        ponNo(S,S1),
        propHer(KB,R,P),
-       concatena(S1,P,P1),
-       verifica(P1,L).
+       actualiza(P,S1,L),!.
 propHer(KB,[Clase:X|R],L) :-
        extensionClase(Clase,KB,S),
        ponClase(S,X,S1),
        propHer(KB,R,P),
-       concatena(S1,P,P1),
-       verifica(P1,L).
+       actualiza(P,S1,L),!.
 propHer(KB,[no(Clase:X)|R],L) :-
        extensionClase(Clase,KB,S),
        ponClaseNo(S,X,S1),
        propHer(KB,R,P),
-       concatena(S1,P,P1),
-       verifica(P1,L).
-	
+       actualiza(P,S1,L),!.
 
 eProp(Prop,KB,L) :-
 	listPropObj(Prop,KB,R1),
 	listPropClas(Prop,KB,R2),
 	propHer(KB,R2,R3),
-	concatena(R1,R3,R4),
-	verifica(R4,L).
+	concatena(R1,R3,L).
 
 
 % Clases a las que pertenece un objeto

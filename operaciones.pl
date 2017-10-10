@@ -54,15 +54,6 @@ verificarNuevaPropiedadClase(Nombre, Propiedad, Base) :-
 	buscar(clase(Nombre, _, _, _), Base, Clase),
 	claseTienePropiedad(Propiedad, Clase),
 	error(['La clase ', Nombre, ' ya tiene la propiedad ', Propiedad]), !, fail.
-verificarNuevaPropiedadClase(Nombre, not(Propiedad), Base) :-
-	buscar(clase(Nombre, _, _, _), Base, Clase),
-	claseTienePropiedad(Propiedad, Clase),
-	error(['La clase ', Nombre, ' ya tiene la propiedad ', Propiedad]), !, fail.
-verificarNuevaPropiedadClase(Nombre, Propiedad, Base) :-
-	buscar(clase(Nombre, _, _, _), Base, Clase),
-	claseTienePropiedad(not(Propiedad), Clase),
-	error(['La clase ', Nombre, ' ya tiene la propiedad ', Propiedad,
-		' en forma negada']), !, fail.
 verificarNuevaPropiedadClase(_, _, _).
 
 verificarNuevaRelacionClase(Nombre, _, _, Base) :-
@@ -218,6 +209,10 @@ claseTienePropiedad(Propiedad, clase(_, _, Props, _)) :-
 	estaEn(Props, Propiedad).
 claseTienePropiedad(Propiedad, clase(_, _, Props, _)) :-
 	estaEn(Props, Propiedad => _).
+claseTienePropiedad(Propiedad, clase(_, _, Props, _)) :-
+	estaEn(Props, not(Propiedad)).
+claseTienePropiedad(Propiedad, clase(_, _, Props, _)) :-
+	estaEn(Props, not(Propiedad => _)).
 
 % Propiedades de objetos -------------------------------------------------------
 

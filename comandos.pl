@@ -165,7 +165,7 @@ comando(borrarPropClase(Nombre, Propiedad), Base, Base) :-
 	\+ verificarEliminarPropiedadClase(Nombre, Propiedad, Base).
 comando(borrarPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
-	eliminar(Propiedad, Props, NuevasProps),
+	eliminarPropiedad(Propiedad, Props, NuevasProps),
 	reemplazar(
 		clase(Nombre, Padre, Props, Rels),
 		clase(Nombre, Padre, NuevasProps, Rels),

@@ -102,6 +102,18 @@ verificarNuevaRelacionObjeto(_, _, _, _).
 
 % Eliminar información --------------------------------------------------------
 
+eliminarPropiedad(_, [], []).
+eliminarPropiedad(Propiedad, [Propiedad | ListaProps], NuevasProps) :-
+	eliminarPropiedad(Propiedad, ListaProps, NuevasProps), !.
+eliminarPropiedad(Propiedad, [not(Propiedad) | ListaProps], NuevasProps) :-
+	eliminarPropiedad(Propiedad, ListaProps, NuevasProps), !.
+eliminarPropiedad(Propiedad, [Propiedad => _ | ListaProps], NuevasProps) :-
+	eliminarPropiedad(Propiedad, ListaProps, NuevasProps), !.
+eliminarPropiedad(Propiedad, [not(Propiedad => _) | ListaProps], NuevasProps) :-
+	eliminarPropiedad(Propiedad, ListaProps, NuevasProps), !.
+eliminarPropiedad(Propiedad, [X | ListaProps], [X | NuevasProps]) :-
+	eliminarPropiedad(Propiedad, ListaProps, NuevasProps).
+
 eliminarPropiedadObjetos([], _, Base, Base).
 eliminarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, Base, NuevaBase) :-
 	eliminar(Propiedad, Props, T1),

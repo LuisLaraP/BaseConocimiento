@@ -143,7 +143,8 @@ comando(nuevaPropObjeto(Nombre, Propiedad, Valor), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
 	agregarPropiedadObjetos(Objetos, Propiedad => Valor, Base, NuevaBase).
 
-% Agrega una nueva pareja propiedad => valor al objeto especificado.
+% Agrega una nueva pareja propiedad => valor en forma negada al objeto
+% especificado.
 %	Nombre - Nombre del objeto a modificar.
 %	Propiedad - Nombre de la nueva propiedad.
 %	Valor - Valor de la nueva propiedad.

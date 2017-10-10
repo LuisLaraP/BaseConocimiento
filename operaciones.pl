@@ -16,15 +16,11 @@
 
 % Agregar información ---------------------------------------------------------
 
-agregarPropiedadObjetos([], _, _, Base, Base).
-agregarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, nil, Base, NBase) :-
+agregarPropiedadObjetos([], _, Base, Base).
+agregarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, Base, NBase) :-
 	agregar(Propiedad, Props, NuevasProps), !,
 	reemplazar(objeto(N, P, Props, R), objeto(N, P, NuevasProps, R), Base, Temp),
-	agregarPropiedadObjetos(Rs, Propiedad, nil, Temp, NBase).
-agregarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, Valor, Base, NBase) :-
-	agregar(Propiedad => Valor, Props, NuevasProps), !,
-	reemplazar(objeto(N, P, Props, R), objeto(N, P, NuevasProps, R), Base, Temp),
-	agregarPropiedadObjetos(Rs, Propiedad, Valor, Temp, NBase).
+	agregarPropiedadObjetos(Rs, Propiedad, Temp, NBase).
 
 agregarRelacionObjetos([], _, _, Base, Base).
 agregarRelacionObjetos([objeto(N, P, Props, Rels) | R], Rel, Obj, Base, NBase) :-
@@ -240,6 +236,10 @@ objetoTienePropiedad(Propiedad, objeto(_, _, Props, _)) :-
 	estaEn(Props, Propiedad).
 objetoTienePropiedad(Propiedad, objeto(_, _, Props, _)) :-
 	estaEn(Props, Propiedad => _).
+objetoTienePropiedad(Propiedad, objeto(_, _, Props, _)) :-
+	estaEn(Props, not(Propiedad)).
+objetoTienePropiedad(Propiedad, objeto(_, _, Props, _)) :-
+	estaEn(Props, not(Propiedad => _)).
 
 % Relaciones de clases --------------------------------------------------------
 

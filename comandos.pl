@@ -121,18 +121,37 @@ comando(nuevaPropObjeto(Nombre, Propiedad), Base, Base) :-
 	\+ verificarNuevaPropiedadObjeto(Nombre, Propiedad, Base).
 comando(nuevaPropObjeto(Nombre, Propiedad), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
-	agregarPropiedadObjetos(Objetos, Propiedad, nil, Base, NuevaBase).
+	agregarPropiedadObjetos(Objetos, Propiedad, Base, NuevaBase).
 
-% Agrega una nueva pareja propiedad => valor a la clase especificada.
+% Agrega una nueva propiedad negada a un objeto. No puede agregar una pareja
+% propiedad => valor.
 %	Nombre - Nombre de la clase a modificar.
 %	Propiedad - Nombre de la nueva propiedad.
+comando(nuevaPropObjeto(Nombre, Propiedad, no), Base, Base) :-
+	\+ verificarNuevaPropiedadObjeto(Nombre, Propiedad, Base).
+comando(nuevaPropObjeto(Nombre, Propiedad, no), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	agregarPropiedadObjetos(Objetos, not(Propiedad), Base, NuevaBase).
+
+% Agrega una nueva pareja propiedad => valor al objeto especificado.
+%	Nombre - Nombre del objeto a modificar.
+%	Propiedad - Nombre de la nueva propiedad.
 %	Valor - Valor de la nueva propiedad.
-comando(nuevaPropObjeto(Nombre, Propiedad), Base, Base) :-
-	errorNuevaPropiedadObjeto(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje), !.
+comando(nuevaPropObjeto(Nombre, Propiedad, _), Base, Base) :-
+	\+ verificarNuevaPropiedadObjeto(Nombre, Propiedad, Base).
 comando(nuevaPropObjeto(Nombre, Propiedad, Valor), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
-	agregarPropiedadObjetos(Objetos, Propiedad, Valor, Base, NuevaBase).
+	agregarPropiedadObjetos(Objetos, Propiedad => Valor, Base, NuevaBase).
+
+% Agrega una nueva pareja propiedad => valor al objeto especificado.
+%	Nombre - Nombre del objeto a modificar.
+%	Propiedad - Nombre de la nueva propiedad.
+%	Valor - Valor de la nueva propiedad.
+comando(nuevaPropObjeto(Nombre, Propiedad, _, no), Base, Base) :-
+	\+ verificarNuevaPropiedadObjeto(Nombre, Propiedad, Base).
+comando(nuevaPropObjeto(Nombre, Propiedad, Valor, no), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	agregarPropiedadObjetos(Objetos, not(Propiedad => Valor), Base, NuevaBase).
 
 % Agrega una nueva relacion a todos los objetos con el nombre especificado.
 %	Nombre - Nombre del objeto a modificar.

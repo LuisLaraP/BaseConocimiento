@@ -215,10 +215,10 @@ comando(borrarRelClase(Nombre, Relacion, Objetivo), Base, Base) :-
 	\+ verificarEliminarRelacionClase(Nombre, Relacion, Objetivo, Base).
 comando(borrarRelClase(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
-	eliminar(Relacion => Objetivo, Rels, NRels),
+	eliminarRelacion(Relacion, Objetivo, Rels, NuevasRels),
 	reemplazar(
 		clase(Nombre, Padre, Props, Rels),
-		clase(Nombre, Padre, Props, NRels),
+		clase(Nombre, Padre, Props, NuevasRels),
 		Base, NuevaBase
 	).
 

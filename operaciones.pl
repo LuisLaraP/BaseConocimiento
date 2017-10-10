@@ -110,6 +110,14 @@ eliminarPropiedad(Propiedad, [not(Propiedad => _) | ListaProps], NuevasProps) :-
 eliminarPropiedad(Propiedad, [X | ListaProps], [X | NuevasProps]) :-
 	eliminarPropiedad(Propiedad, ListaProps, NuevasProps).
 
+eliminarRelacion(_, _, [], []).
+eliminarRelacion(Relacion, Objetivo, [Relacion => Objetivo | Lista], NuevaLista) :-
+	eliminarRelacion(Relacion, Objetivo, Lista, NuevaLista), !.
+eliminarRelacion(Relacion, Objetivo, [not(Relacion => Objetivo) | Lista], NuevaLista) :-
+	eliminarRelacion(Relacion, Objetivo, Lista, NuevaLista), !.
+eliminarRelacion(Relacion, Objetivo, [X | Lista], [X | NuevaLista]) :-
+	eliminarRelacion(Relacion, Objetivo, Lista, NuevaLista).
+
 eliminarPropiedadObjetos([], _, Base, Base).
 eliminarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, Base, NuevaBase) :-
 	eliminarPropiedad(Propiedad, Props, NuevasProps),
@@ -157,8 +165,8 @@ verificarEliminarRelacionClase(Nombre, _, _, Base) :-
 	\+ existeClase(Nombre, Base),
 	error(['No se conoce la clase ', Nombre, '.']), !, fail.
 verificarEliminarRelacionClase(Nombre, Relacion, Objetivo, Base) :-
-	buscar(clase(Nombre, _, _, _), Base, clase(_, _, _, Rels)),
-	\+ estaEn(Rels, Relacion => Objetivo),
+	buscar(clase(Nombre, _, _, _), Base, Clase),
+	\+ claseTieneRelacion(Relacion, Objetivo, Clase),
 	error(['La clase ', Nombre, ' no tiene la relación ', Relacion, ' con ',
 		Objetivo]), !, fail.
 verificarEliminarRelacionClase(_, _, _, _).

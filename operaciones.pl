@@ -112,9 +112,8 @@ eliminarPropiedad(Propiedad, [X | ListaProps], [X | NuevasProps]) :-
 
 eliminarPropiedadObjetos([], _, Base, Base).
 eliminarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, Base, NuevaBase) :-
-	eliminar(Propiedad, Props, T1),
-	eliminar(Propiedad => _, T1, T2),
-	reemplazar(objeto(N, P, Props, R), objeto(N, P, T2, R), Base, Temp),
+	eliminarPropiedad(Propiedad, Props, NuevasProps),
+	reemplazar(objeto(N, P, Props, R), objeto(N, P, NuevasProps, R), Base, Temp),
 	eliminarPropiedadObjetos(Rs, Propiedad, Temp, NuevaBase).
 
 eliminarRelacionObjetos([], _, _, Base, Base).

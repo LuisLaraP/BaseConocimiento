@@ -244,6 +244,8 @@ objetoTienePropiedad(Propiedad, objeto(_, _, Props, _)) :-
 
 claseTieneRelacion(Relacion, Objetivo, clase(_, _, _, Rels)) :-
 	estaEn(Rels, Relacion => Objetivo).
+claseTieneRelacion(Relacion, Objetivo, clase(_, _, _, Rels)) :-
+	estaEn(Rels, not(Relacion => Objetivo)).
 
 % Relaciones de objetos -------------------------------------------------------
 

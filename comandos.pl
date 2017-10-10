@@ -100,6 +100,21 @@ comando(nuevaRelClase(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
 		Base, NuevaBase
 	).
 
+% Agrega una nueva relacion negada a la clase especificada.
+%	Nombre - Nombre de la clase a modificar.
+%	Relacion - Nombre de la nueva relación.
+%	Objetivo - Entidad con la cual establecer la relación.
+comando(nuevaRelClase(Nombre, Relacion, Objetivo, no), Base, Base) :-
+	\+ verificarNuevaRelacionClase(Nombre, Relacion, Objetivo, Base).
+comando(nuevaRelClase(Nombre, Relacion, Objetivo, no), Base, NuevaBase) :-
+	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
+	agregar(not(Relacion => Objetivo), Rels, NRels),
+	reemplazar(
+		clase(Nombre, Padre, Props, Rels),
+		clase(Nombre, Padre, Props, NRels),
+		Base, NuevaBase
+	).
+
 % Agrega un nuevo objeto a la base de conocimiento. Versión simple.
 %	Nombre - Identificador para el objeto.
 %	Padre - Clase a la cual pertenece el nuevo objeto.

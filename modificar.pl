@@ -7,10 +7,10 @@ modificarNombreClase(AntiguoNom, NuevoNom, Base, NuevaBase) :- mnc(AntiguoNom, N
 modificarNombreObjeto(AntiguoNom, NuevoNom, Base, NuevaBase) :- mno(AntiguoNom, NuevoNom, Base, NB), mrs(AntiguoNom, NuevoNom, NB, NuevaBase).
 
 % Modificar propiedad.
-modificaPropiedad(Propiedad, NuevoValor, Base, NuevaBase) :- mp(Propiedad, NuevoValor, Base, NuevaBase).
+modificarPropiedad(Propiedad, NuevoValor, Base, NuevaBase) :- mp(Propiedad, NuevoValor, Base, NuevaBase).
 
 % Modifica relacion.
-modificaRelacion(Relacion, NuevoValor, Base, NuevaBase) :- mr(Relacion, NuevoValor, Base, NuevaBase).
+modificarRelacion(Relacion, NuevoValor, Base, NuevaBase) :- mr(Relacion, NuevoValor, Base, NuevaBase).
 
 % Auxiliar: Modificar el nombre de una clase en los campos: Nombre de la clase, padre de una clase o clase de un objeto.
 mnc(_, _, [], []).
@@ -67,6 +67,8 @@ mod_lista_prop(Propiedad, NuevaPropiedad, [Propiedad=>_ | T], [Propiedad=>NuevaP
 mod_lista_prop(Propiedad, NuevaPropiedad, [not(Propiedad=>_) | T], [not(Propiedad=>NuevaPropiedad) | NT]) :-
 	mod_lista_prop(Propiedad, NuevaPropiedad, T, NT).
 mod_lista_prop(Propiedad, NuevaPropiedad, [Propiedad | T], [NuevaPropiedad | NT]) :-
+	mod_lista_prop(Propiedad, NuevaPropiedad, T, NT).
+mod_lista_prop(Propiedad, NuevaPropiedad, [not(Propiedad) | T], [not(NuevaPropiedad) | NT]) :-
 	mod_lista_prop(Propiedad, NuevaPropiedad, T, NT).
 mod_lista_prop(Propiedad, NuevaPropiedad, [P | T], [P | NT]) :-
 	mod_lista_prop(Propiedad, NuevaPropiedad, T, NT).

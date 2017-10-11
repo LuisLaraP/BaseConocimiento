@@ -2,7 +2,7 @@
 % Universidad Nacional Autónoma de México
 % Inteligencia Artificial
 %
-% Proyecto 1 - Representación del comocimiento
+% Proyecto 1 - Representación del conocimiento
 %
 % Luis Alejandro Lara Patiño
 % Roberto Monroy Argumedo
@@ -172,16 +172,16 @@ comando(extProp(Propiedad),Base,Base) :-
 comando(extRel(Relacion),Base,Base) :-
 	eRel(Relacion,Base,R),
 	write(R),nl.
-	
+
 % Clases a las que pertenece un objeto 
 comando(clasesObj(Objeto),Base,Base) :-
-	buscar(objeto(Objeto,_,_,_),Base,Ob),
+	filtrar(objetoSeLlama(Objeto),Base,[Ob]),
 	clasesObjeto(Ob,Base,R),
 	write(R),nl.
 
 % Propiedades de un objeto
 comando(propsObjeto(Objeto),Base,Base) :-
-	buscar(objeto(Objeto,_,_,_),Base,Ob),
+	filtrar(objetoSeLlama(Objeto),Base,[Ob]),
 	propiedadesObjeto(Ob,R),
 	write(R),nl.
 
@@ -193,7 +193,7 @@ comando(propsClase(Clase),Base,Base) :-
 
 % Relaciones de un objeto
 comando(relsObjeto(Objeto),Base,Base) :-
-	buscar(objeto(Objeto,_,_,_),Base,Ob),
+	filtrar(objetoSeLlama(Objeto),Base,[Ob]),
 	relacionesObjeto(Ob,R),
 	write(R),nl.
 

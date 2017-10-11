@@ -24,4 +24,5 @@
 :- op(800, xfx, '=>').
 
 iniciar :-
-	interprete([]).
+	assert(kb([])),
+	interprete.

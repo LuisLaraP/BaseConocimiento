@@ -13,16 +13,14 @@
 % operaciones sobre la base de conocimiento.
 % =============================================================================
 
-interprete(Base) :-
+interprete :-
+	repeat,
 	read(Comando),
-	interprete(Base, Comando).
-
-interprete(_, salir) :- !.
-
-interprete(Base, Comando) :-
-	comando(Comando, Base, NuevaBase), !,
-	interprete(NuevaBase).
-
-interprete(Base, Comando) :-
-	escribir(['Comando inválido: ', Comando, '.']),
-	interprete(Base).
+	(Comando \= end_of_file, Comando \= salir ->
+		kb(Base),
+		call(comando(Comando), Base, NuevaBase),
+		retract(kb(Base)),
+		assert(kb(NuevaBase)),
+		fail;
+		!
+	).

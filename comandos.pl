@@ -264,31 +264,6 @@ comando(borrarRelObjeto(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
 	eliminarRelacionObjetos(Objetos, Relacion, Objetivo, Base, NuevaBase).
 
-% Utilidades ------------------------------------------------------------------
-
-% Lee una base desde el archivo dado.
-%	Nombre: Nombre de la base a leer.
-comando(cargar(Nombre), _, NuevaBase) :-
-	atom_concat('bases/', Nombre, Ruta),
-	open(Ruta, read, Archivo),
-	read(Archivo, NuevaBase),
-	close(Archivo).
-
-% Escribe la base actual en el archivo dado. Si el archivo no existe, se
-% creará. Si ya existe, todo su contenido se sobreescribirá.
-%	Nombre: Nombre de la base a escribir.
-comando(guardar(Nombre), Base, Base) :-
-	atom_concat('bases/', Nombre, Ruta),
-	open(Ruta, write, Archivo),
-	writeq(Archivo, Base),
-	put_char(Archivo, .),
-	close(Archivo).
-
-% Imprime todos los objetos actualmente almacenados en la base de conocimiento.
-comando(ver, Base, Base) :-
-	imprimirLista(Base).
-	
-	
 % Comandos de consulta-------------------------------------------------------
 
 % Extensión de una clase:
@@ -306,7 +281,7 @@ comando(extRel(Relacion),Base,Base) :-
 	eRel(Relacion,Base,R),
 	write(R),nl.
 
-% Clases a las que pertenece un objeto 
+% Clases a las que pertenece un objeto
 comando(clasesObj(Objeto),Base,Base) :-
 	filtrar(objetoSeLlama(Objeto),Base,[Ob]),
 	clasesObjeto(Ob,Base,R),
@@ -335,3 +310,27 @@ comando(relsClase(Clase),Base,Base) :-
 	buscar(clase(Clase,_,_,_),Base,Cl),
 	relacionesClase(Cl,R),
 	write(R),nl.
+
+% Utilidades ------------------------------------------------------------------
+
+% Lee una base desde el archivo dado.
+%	Nombre: Nombre de la base a leer.
+comando(cargar(Nombre), _, NuevaBase) :-
+	atom_concat('bases/', Nombre, Ruta),
+	open(Ruta, read, Archivo),
+	read(Archivo, NuevaBase),
+	close(Archivo).
+
+% Escribe la base actual en el archivo dado. Si el archivo no existe, se
+% creará. Si ya existe, todo su contenido se sobreescribirá.
+%	Nombre: Nombre de la base a escribir.
+comando(guardar(Nombre), Base, Base) :-
+	atom_concat('bases/', Nombre, Ruta),
+	open(Ruta, write, Archivo),
+	writeq(Archivo, Base),
+	put_char(Archivo, .),
+	close(Archivo).
+
+% Imprime todos los objetos actualmente almacenados en la base de conocimiento.
+comando(ver, Base, Base) :-
+	imprimirLista(Base).

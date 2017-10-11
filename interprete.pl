@@ -21,7 +21,7 @@ interprete :-
 		call(comando(Comando), Base, NuevaBase),
 		retract(kb(_)),
 		assert(kb(NuevaBase)),
-		call(comando(guardar(backup)), NuevaBase, _),
+		%call(comando(guardar(backup)), NuevaBase, _),
 		fail;
 		!
 	).

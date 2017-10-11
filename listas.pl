@@ -101,8 +101,7 @@ reemplazar(_, _, [], []).
 reemplazar(Original, Nuevo, [Original | R], [Nuevo | NuevaCola]) :-
 	reemplazar(Original, Nuevo, R, NuevaCola), !.
 reemplazar(Original, Nuevo, [C | R], [C | NuevaCola]) :-
-	reemplazar(Original, Nuevo, R, NuevaCola), !.
-	
+	reemplazar(Original, Nuevo, R, NuevaCola), !.	
 
 %concatena dos listas
 concatena([],L,L).
@@ -189,3 +188,14 @@ revisaDefaults([no(X:Y)|T],[no(X:Y)|R]) :-
 	eliminar(X:Y,T,C),
 	revisaDefaults(C,R),!.
 
+% Elimina de la primera lista todos los elementos que aparecen en la segunda.
+% Actúa como una resta de lista.
+%	Arg. 1 - Lista a modificar.
+%	Arg. 2 - Lista a restar.
+%	Arg. 3 - Lista resultado.
+restar([], _, []).
+restar([L1 | L1s], L2, [L1 | Temp]) :-
+	\+ estaEn(L2, L1), !,
+	restar(L1s, L2, Temp).
+restar([_ | L1s], L2, Resta) :-
+	restar(L1s, L2, Resta).

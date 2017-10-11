@@ -20,9 +20,8 @@
 %	Nombre - Nombre de la clase.
 %	Padre - Clase de la cual hereda la nueva clase.
 comando(nuevaClase(Nombre, Padre), Base, Base) :-
-	errorNuevaClase(clase(Nombre, Padre, [], []), Base, Mensaje),
-	error(Mensaje), !.
-comando(nuevaClase(Nombre, Padre), Base, NuevaBase) :-
+	\+ verificarNuevaClase(clase(Nombre, Padre, [], []), Base).
+comando(nuevaClase(Nombre, Padre), Base, NuevaBase) :- !,
 	agregar(clase(Nombre, Padre, [], []), Base, NuevaBase).
 
 % Agrega una nueva propiedad simple a una clase. No puede agregar una pareja
@@ -30,11 +29,25 @@ comando(nuevaClase(Nombre, Padre), Base, NuevaBase) :-
 %	Nombre - Nombre de la clase a modificar.
 %	Propiedad - Nombre de la nueva propiedad.
 comando(nuevaPropClase(Nombre, Propiedad), Base, Base) :-
-	errorNuevaPropiedadClase(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarNuevaPropiedadClase(Nombre, Propiedad, Base).
 comando(nuevaPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
 	agregar(Propiedad, Props, NuevasProps),
+	reemplazar(
+		clase(Nombre, Padre, Props, Rels),
+		clase(Nombre, Padre, NuevasProps, Rels),
+		Base, NuevaBase
+	).
+
+% Agrega una nueva propiedad negada a una clase. No puede agregar una pareja
+% propiedad => valor.
+%	Nombre - Nombre de la clase a modificar.
+%	Propiedad - Nombre de la nueva propiedad.
+comando(nuevaPropClase(Nombre, Propiedad, no), Base, Base) :-
+	\+ verificarNuevaPropiedadClase(Nombre, Propiedad, Base).
+comando(nuevaPropClase(Nombre, Propiedad, no), Base, NuevaBase) :-
+	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
+	agregar(not(Propiedad), Props, NuevasProps),
 	reemplazar(
 		clase(Nombre, Padre, Props, Rels),
 		clase(Nombre, Padre, NuevasProps, Rels),
@@ -46,8 +59,7 @@ comando(nuevaPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 %	Propiedad - Nombre de la nueva propiedad.
 %	Valor - Valor de la nueva propiedad.
 comando(nuevaPropClase(Nombre, Propiedad, _), Base, Base) :-
-	errorNuevaPropiedadClase(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarNuevaPropiedadClase(Nombre, Propiedad, Base).
 comando(nuevaPropClase(Nombre, Propiedad, Valor), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
 	agregar(Propiedad => Valor, Props, NuevasProps),
@@ -57,18 +69,49 @@ comando(nuevaPropClase(Nombre, Propiedad, Valor), Base, NuevaBase) :-
 		Base, NuevaBase
 	).
 
-% Elimina la propiedad especificada de la clase.
+% Agrega una nueva pareja propiedad => valor en forma negada a la clase
+% especificada.
 %	Nombre - Nombre de la clase a modificar.
-%	Propiedad - Nombre de la propiedad a eliminar.
-comando(borrarPropClase(Nombre, Propiedad), Base, Base) :-
-	errorEliminarPropiedadClase(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje), !.
-comando(borrarPropClase(Nombre, Propiedad), Base, NuevaBase) :-
+%	Propiedad - Nombre de la nueva propiedad.
+%	Valor - Valor de la nueva propiedad.
+comando(nuevaPropClase(Nombre, Propiedad, _, no), Base, Base) :-
+	\+ verificarNuevaPropiedadClase(Nombre, Propiedad, Base).
+comando(nuevaPropClase(Nombre, Propiedad, Valor, no), Base, NuevaBase) :-
 	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
-	eliminar(Propiedad, Props, NuevasProps),
+	agregar(not(Propiedad => Valor), Props, NuevasProps),
 	reemplazar(
 		clase(Nombre, Padre, Props, Rels),
 		clase(Nombre, Padre, NuevasProps, Rels),
+		Base, NuevaBase
+	).
+
+% Agrega una nueva relacion a la clase especificada.
+%	Nombre - Nombre de la clase a modificar.
+%	Relacion - Nombre de la nueva relación.
+%	Objetivo - Entidad con la cual establecer la relación.
+comando(nuevaRelClase(Nombre, Relacion, Objetivo), Base, Base) :-
+	\+ verificarNuevaRelacionClase(Nombre, Relacion, Objetivo, Base).
+comando(nuevaRelClase(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
+	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
+	agregar(Relacion => Objetivo, Rels, NRels),
+	reemplazar(
+		clase(Nombre, Padre, Props, Rels),
+		clase(Nombre, Padre, Props, NRels),
+		Base, NuevaBase
+	).
+
+% Agrega una nueva relacion negada a la clase especificada.
+%	Nombre - Nombre de la clase a modificar.
+%	Relacion - Nombre de la nueva relación.
+%	Objetivo - Entidad con la cual establecer la relación.
+comando(nuevaRelClase(Nombre, Relacion, Objetivo, no), Base, Base) :-
+	\+ verificarNuevaRelacionClase(Nombre, Relacion, Objetivo, Base).
+comando(nuevaRelClase(Nombre, Relacion, Objetivo, no), Base, NuevaBase) :-
+	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
+	agregar(not(Relacion => Objetivo), Rels, NRels),
+	reemplazar(
+		clase(Nombre, Padre, Props, Rels),
+		clase(Nombre, Padre, Props, NRels),
 		Base, NuevaBase
 	).
 
@@ -76,10 +119,11 @@ comando(borrarPropClase(Nombre, Propiedad), Base, NuevaBase) :-
 %	Nombre - Identificador para el objeto.
 %	Padre - Clase a la cual pertenece el nuevo objeto.
 comando(nuevoObjeto(Nombre, Padre), Base, Base) :-
-	errorNuevoObjeto(objeto([Nombre], Padre, [], []), Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarNuevoObjeto(objeto([Nombre], Padre, [], []), Base).
 comando(nuevoObjeto(nil, Padre), Base, NuevaBase) :-
-	agregar(objeto([], Padre, [], []), Base, NuevaBase), !.
+	generarId(Base, Id),
+	agregar(objeto([Id], Padre, [], []), Base, NuevaBase),
+	escribir(['El nuevo objeto podrá ser referenciado usando el identificador ', Id, '.']), !.
 comando(nuevoObjeto(Nombre, Padre), Base, NuevaBase) :-
 	is_list(Nombre), !,
 	agregar(objeto(Nombre, Padre, [], []), Base, NuevaBase).
@@ -91,30 +135,69 @@ comando(nuevoObjeto(Nombre, Padre), Base, NuevaBase) :-
 %	Nombre - Nombre de la clase a modificar.
 %	Propiedad - Nombre de la nueva propiedad.
 comando(nuevaPropObjeto(Nombre, Propiedad), Base, Base) :-
-	errorNuevaPropiedadObjeto(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarNuevaPropiedadObjeto(Nombre, Propiedad, Base).
 comando(nuevaPropObjeto(Nombre, Propiedad), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
-	agregarPropiedadObjetos(Objetos, Propiedad, nil, Base, NuevaBase).
+	agregarPropiedadObjetos(Objetos, Propiedad, Base, NuevaBase).
 
-% Agrega una nueva pareja propiedad => valor a la clase especificada.
+% Agrega una nueva propiedad negada a un objeto. No puede agregar una pareja
+% propiedad => valor.
 %	Nombre - Nombre de la clase a modificar.
 %	Propiedad - Nombre de la nueva propiedad.
+comando(nuevaPropObjeto(Nombre, Propiedad, no), Base, Base) :-
+	\+ verificarNuevaPropiedadObjeto(Nombre, Propiedad, Base).
+comando(nuevaPropObjeto(Nombre, Propiedad, no), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	agregarPropiedadObjetos(Objetos, not(Propiedad), Base, NuevaBase).
+
+% Agrega una nueva pareja propiedad => valor al objeto especificado.
+%	Nombre - Nombre del objeto a modificar.
+%	Propiedad - Nombre de la nueva propiedad.
 %	Valor - Valor de la nueva propiedad.
-comando(nuevaPropObjeto(Nombre, Propiedad), Base, Base) :-
-	errorNuevaPropiedadObjeto(Nombre, Propiedad, Base, Mensaje),
-	error(Mensaje), !.
+comando(nuevaPropObjeto(Nombre, Propiedad, _), Base, Base) :-
+	\+ verificarNuevaPropiedadObjeto(Nombre, Propiedad, Base).
 comando(nuevaPropObjeto(Nombre, Propiedad, Valor), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
-	agregarPropiedadObjetos(Objetos, Propiedad, Valor, Base, NuevaBase).
+	agregarPropiedadObjetos(Objetos, Propiedad => Valor, Base, NuevaBase).
+
+% Agrega una nueva pareja propiedad => valor en forma negada al objeto
+% especificado.
+%	Nombre - Nombre del objeto a modificar.
+%	Propiedad - Nombre de la nueva propiedad.
+%	Valor - Valor de la nueva propiedad.
+comando(nuevaPropObjeto(Nombre, Propiedad, _, no), Base, Base) :-
+	\+ verificarNuevaPropiedadObjeto(Nombre, Propiedad, Base).
+comando(nuevaPropObjeto(Nombre, Propiedad, Valor, no), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	agregarPropiedadObjetos(Objetos, not(Propiedad => Valor), Base, NuevaBase).
+
+% Agrega una nueva relacion a todos los objetos con el nombre especificado.
+%	Nombre - Nombre del objeto a modificar.
+%	Relacion - Nombre de la nueva relación.
+%	Objetivo - Entidad con la cual establecer la relación.
+comando(nuevaRelObjeto(Nombre, Relacion, Objetivo), Base, Base) :-
+	\+ verificarNuevaRelacionObjeto(Nombre, Relacion, Objetivo, Base).
+comando(nuevaRelObjeto(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	agregarRelacionObjetos(Objetos, Relacion => Objetivo, Base, NuevaBase).
+
+% Agrega una nueva relacion negada a todos los objetos con el nombre
+% especificado.
+%	Nombre - Nombre del objeto a modificar.
+%	Relacion - Nombre de la nueva relación.
+%	Objetivo - Entidad con la cual establecer la relación.
+comando(nuevaRelObjeto(Nombre, Relacion, Objetivo, no), Base, Base) :-
+	\+ verificarNuevaRelacionObjeto(Nombre, Relacion, Objetivo, Base).
+comando(nuevaRelObjeto(Nombre, Relacion, Objetivo, no), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	agregarRelacionObjetos(Objetos, not(Relacion => Objetivo), Base, NuevaBase).
 
 % Comandos para eliminar ------------------------------------------------------
 
 % Elimina de la base de conocimiento la clase con el nombre dado.
 %	Nombre - Nombre de la clase a eliminar.
 comando(borrarClase(Nombre), Base, Base) :-
-	errorEliminarClase(Nombre, Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarEliminarClase(Nombre, Base).
 comando(borrarClase(Nombre), Base, NuevaBase) :-
 	buscar(clase(Nombre, Padre, _, _), Base, Clase),
 	clasesHijasDe(Nombre, Base, ClasesHijas),
@@ -123,15 +206,63 @@ comando(borrarClase(Nombre), Base, NuevaBase) :-
 	cambiarPadre(Padre, ObjetosHijos, Temp1, Temp2),
 	eliminar(Clase, Temp2, NuevaBase).
 
+% Elimina la propiedad especificada de la clase.
+%	Nombre - Nombre de la clase a modificar.
+%	Propiedad - Nombre de la propiedad a eliminar.
+comando(borrarPropClase(Nombre, Propiedad), Base, Base) :-
+	\+ verificarEliminarPropiedadClase(Nombre, Propiedad, Base).
+comando(borrarPropClase(Nombre, Propiedad), Base, NuevaBase) :-
+	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
+	eliminarPropiedad(Propiedad, Props, NuevasProps),
+	reemplazar(
+		clase(Nombre, Padre, Props, Rels),
+		clase(Nombre, Padre, NuevasProps, Rels),
+		Base, NuevaBase
+	).
+
+% Elimina la relación de la clase dada con el objetivo especificado.
+%	Nombre - Nombre de la clase a modificar.
+%	Relacion - Nombre de la relación a eliminar.
+%	Objetivo - Entidad con la cual se quiere eliminar la relación.
+comando(borrarRelClase(Nombre, Relacion, Objetivo), Base, Base) :-
+	\+ verificarEliminarRelacionClase(Nombre, Relacion, Objetivo, Base).
+comando(borrarRelClase(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
+	buscar(clase(Nombre, _, _, _), Base, clase(_, Padre, Props, Rels)),
+	eliminarRelacion(Relacion, Objetivo, Rels, NuevasRels),
+	reemplazar(
+		clase(Nombre, Padre, Props, Rels),
+		clase(Nombre, Padre, Props, NuevasRels),
+		Base, NuevaBase
+	).
+
 % Elimina de la base de conocimiento todos los objetos que tengan el nombre
 % dado.
 %	Nombre - Nombre de los objetos a eliminar.
 comando(borrarObjeto(Nombre), Base, Base) :-
-	errorEliminarObjeto(Nombre, Base, Mensaje),
-	error(Mensaje), !.
+	\+ verificarEliminarObjeto(Nombre, Base).
 comando(borrarObjeto(Nombre), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, ListaObjetos),
 	eliminarTodos(ListaObjetos, Base, NuevaBase).
+
+% Elimina la propiedad especificada de todos los objetos con el nombre dado.
+%	Nombre - Nombre del objeto a modificar.
+%	Propiedad - Nombre de la propiedad a eliminar.
+comando(borrarPropObjeto(Nombre, Propiedad), Base, Base) :-
+	\+ verificarEliminarPropiedadObjeto(Nombre, Propiedad, Base).
+comando(borrarPropObjeto(Nombre, Propiedad), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	eliminarPropiedadObjetos(Objetos, Propiedad, Base, NuevaBase).
+
+% Elimina la relación especificada de todos los objetos con el nombre dado.
+%	Nombre - Nombre del objeto a modificar.
+%	Relacion - Nombre de la relación a eliminar.
+%	Objetivo - Nombre de la entidad con la cual está establecida la relación a
+%		eliminar.
+comando(borrarRelObjeto(Nombre, Relacion, Objetivo), Base, Base) :-
+	\+ verificarEliminarRelacionObjeto(Nombre, Relacion, Objetivo, Base).
+comando(borrarRelObjeto(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	eliminarRelacionObjetos(Objetos, Relacion, Objetivo, Base, NuevaBase).
 
 % Utilidades ------------------------------------------------------------------
 

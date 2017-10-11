@@ -1,90 +1,155 @@
 :- op(800, xfx, '=>').
 
-% Modificar el nombre de una clase.
-modificarNombreClase(AntiguoNom, NuevoNom, Base, NuevaBase) :- mnc(AntiguoNom, NuevoNom, Base, NB) , mrs(AntiguoNom, NuevoNom, NB, NuevaBase).
+% Modificar el nombre de una clase. Falla si se repite el nombre
+modificar_nombre_clase(AntiguoNom, NuevoNom, Base, NuevaBase) :- unico(NuevoNom, Base), mnc(AntiguoNom, NuevoNom, Base, NB), mrs(AntiguoNom, NuevoNom, NB, NuevaBase).
 
 % Modificar el nombre de un objeto.
-modificarNombreObjeto(AntiguoNom, NuevoNom, Base, NuevaBase) :- mno(AntiguoNom, NuevoNom, Base, NB), mrs(AntiguoNom, NuevoNom, NB, NuevaBase).
+modificar_nombre_objeto(AntiguoNom, NuevoNom, Base, NuevaBase) :- mno(AntiguoNom, NuevoNom, Base, NB), mrs(AntiguoNom, NuevoNom, NB, NuevaBase).
 
-% Modificar propiedad.
-modificarPropiedad(Propiedad, NuevoValor, Base, NuevaBase) :- mp(Propiedad, NuevoValor, Base, NuevaBase).
+% Modificar propiedad de una clase u objeto.
+modificar_propiedad(Entidad, Propiedad, NuevoValor, Base, NuevaBase) :- mp(Entidad, Propiedad, _, NuevoValor, Base, NuevaBase).
 
-% Modifica relacion.
-modificarRelacion(Relacion, NuevoValor, Base, NuevaBase) :- mr(Relacion, NuevoValor, Base, NuevaBase).
+%Modificar proiedad con valor especifico de una clase u objeto.
+modificar_propiedad(Entidad, Propiedad, ViejoValor, NuevoValor, Base, NuevaBase) :- mp(Entidad, Propiedad, ViejoValor, NuevoValor, Base, NuevaBase).
 
+% Modifica relacion de una clase u objeto.
+modificar_relacion(Entidad, Relacion, NuevoValor, Base, NuevaBase) :- mr(Entidad, Relacion, _, NuevoValor, Base, NuevaBase).
+
+% Modifica relacion con un valor especifico de una calse u objeto.
+modificar_relacion(Entidad, Relacion, ViejoValor, NuevoValor, Base, NuevaBase) :- mr(Entidad, Relacion, ViejoValor, NuevoValor, Base, NuevaBase).
+
+% Niega una propiedad de una clase u objeto.
+negar_propiedad(Entidad, Propiedad, Base, NuevaBase) :- np(Entidad, Propiedad, _, Base, NuevaBase).
+
+% Niega una propiedad de una clase u objeto.
+negar_propiedad(Entidad, Propiedad, Valor, Base, NuevaBase) :- np(Entidad, Propiedad, Valor, Base, NuevaBase).
+
+% Nieha una propiedad de una clase u objeto.
+negar_relacion(Entidad, Relacion, Base, NuevaBase) :- nr(Entidad, Relacion, _, Base, NuevaBase).
+
+% Nieha una propiedad de una clase u objeto.
+negar_relacion(Entidad, Relacion, Valor, Base, NuevaBase) :- nr(Entidad, Relacion, Valor, Base, NuevaBase).
+
+
+% Auxiliar: Verifica que el elemento no esté en la lista
+unico(_, []).
+
+unico(Nom, [clase(Nom, _, _, _) | _]):-
+	false.
+
+unico(Nom, [_ | T]) :-
+	unico(Nom, T).
+      
 % Auxiliar: Modificar el nombre de una clase en los campos: Nombre de la clase, padre de una clase o clase de un objeto.
 mnc(_, _, [], []).
-mnc(AntiguoNom, NuevoNom, [clase(AntiguoNom, Pa, Pr, Re) | T], [clase(NuevoNom, Pa, Pr, Re) | NT]) :-
-	mnc(AntiguoNom, NuevoNom, T, NT).
-mnc(AntiguoNom, NuevoNom, [clase(No, AntiguoNom, Pr, Re) | T], [clase(No, NuevoNom, Pr, Re) | NT]) :-
-	mnc(AntiguoNom, NuevoNom, T, NT).
-mnc(AntiguoNom, NuevoNom, [objeto(No, AntiguoNom, Pr, Re) | T], [objeto(No, NuevoNom, Pr, Re) | NT]) :-
-	mnc(AntiguoNom, NuevoNom, T, NT).
+
+mnc(AntiguoNom, NuevoNom, [clase(AntiguoNom, M, P, R) | T], [clase(NuevoNom, M, P, R) | TN]) :-
+	mnc(AntiguoNom, NuevoNom, T, TN).
+
+mnc(AntiguoNom, NuevoNom, [clase(N, AntiguoNom, P, R) | T], [clase(N, NuevoNom, P, R) | TN]) :-
+	mnc(AntiguoNom, NuevoNom, T, TN).
+
 mnc(AntiguoNom, NuevoNom, [H|T], [H|NT]) :-
 	mnc(AntiguoNom, NuevoNom, T, NT).
 
 % Auxiliar: Modificar el nombre de un objeto o clase en una relacion.
 mrs(_, _, [], []).
-mrs(Relacion, NuevaRelacion, [clase(No, Pa, Pr, Re) | T], [clase(No, Pa, Pr, NRe) | NT]) :-
-	mod_lista_rel_sust(Relacion, NuevaRelacion, Re, NRe), mrs(Relacion, NuevaRelacion, T, NT).
-mrs(Relacion, NuevaRelacion, [objeto(No, Pa, Pr, Re) | T], [objeto(No, Pa, Pr, NRe) | NT]) :-
-	mod_lista_rel_sust(Relacion, NuevaRelacion, Re, NRe), mrs(Relacion, NuevaRelacion, T, NT).
 
-% Auxiliar: Modificar el nombre de un objeto o clase en una lista de relaciones.
-mod_lista_rel_sust(_, _, [], []).
-mod_lista_rel_sust(Relacion, NuevaRelacion, [R=>Relacion | T], [R=>NuevaRelacion | NT]) :-
-	mod_lista_rel_sust(Relacion, NuevaRelacion, T, NT).
-mod_lista_rel_sust(Relacion, NuevaRelacion, [not(R=>Relacion) | T], [not(R=>NuevaRelacion) | NT]) :-
-	mod_lista_rel_sust(Relacion, NuevaRelacion, T, NT).
-mod_lista_rel_sust(Relacion, NuevaRelacion, [R | T], [R | NT]) :-
-	mod_lista_rel_sust(Relacion, NuevaRelacion, T, NT).
+mrs(Relacion, NuevaRelacion, [clase(N, M, P, R) | T], [clase(N, M, P, NR) | NT]) :-
+	mod_lista(_, Relacion, NuevaRelacion, R, NR), mrs(Relacion, NuevaRelacion, T, NT).
+
+mrs(Relacion, NuevaRelacion, [objeto(N, M, P, R) | T], [objeto(N, M, P, NR) | NT]) :-
+	mod_lista(_, Relacion, NuevaRelacion, R, NR), mrs(Relacion, NuevaRelacion, T, NT).
 
 % Auxiliar: Modificar el nombre de un objeto.
 mno(_, _, [], []).
+
 mno(AntiguoNom, NuevoNom, [objeto(ID, Cl, Pr, Re) | T], [objeto(NID, Cl, Pr, Re) | NT]) :-
-	mno(AntiguoNom, NuevoNom, T, NT), mod_lista_nom(AntiguoNom, NuevoNom, ID, NID).
+	mno(AntiguoNom, NuevoNom, T, NT), mod_lista(AntiguoNom, _, NuevoNom, ID, NID).
+
 mno(AntiguoNom, NuevoNom, [H | T], [H | NT]) :- 
 	mno(AntiguoNom, NuevoNom, T, NT).
 
-% Auxiliar: Modifica el nombre en una lista de nombres.
-mod_lista_nom(_, _, [], []).
-mod_lista_nom(AntiguoNombre, NuevoNombre, [AntiguoNombre | T], [NuevoNombre | NT]) :-
-	mod_lista_nom(AntiguoNombre, NuevoNombre, T, NT).
-mod_lista_nom(AntiguoNombre, NuevoNombre, [N | T], [N | NT]) :-
-	mod_lista_nom(AntiguoNombre, NuevoNombre, T, NT).
-
 % Auxiliar: Modicar una propiedad de una clase u objeto.
-mp(_, _, [], []).
-mp(Propiedad, NuevaPropiedad, [clase(No, Pa, Pr, Re) | T], [clase(No, Pa, NPr, Re) | NT]) :-
-	mod_lista_prop(Propiedad, NuevaPropiedad, Pr, NPr), mp(Propiedad, NuevaPropiedad, T, NT).
-mp(Propiedad, NuevaPropiedad, [objeto(No, Pa, Pr, Re) | T], [objeto(No, Pa, NPr, Re) | NT]) :-
-	mod_lista_prop(Propiedad, NuevaPropiedad, Pr, NPr), mp(Propiedad, NuevaPropiedad, T, NT).
+mp(_, _, _, [], []).
 
-% Auxiliar: Modifica una lista de propiedades.
-mod_lista_prop(_, _, [], []).
-mod_lista_prop(Propiedad, NuevaPropiedad, [Propiedad=>_ | T], [Propiedad=>NuevaPropiedad | NT]) :-
-	mod_lista_prop(Propiedad, NuevaPropiedad, T, NT).
-mod_lista_prop(Propiedad, NuevaPropiedad, [not(Propiedad=>_) | T], [not(Propiedad=>NuevaPropiedad) | NT]) :-
-	mod_lista_prop(Propiedad, NuevaPropiedad, T, NT).
-mod_lista_prop(Propiedad, NuevaPropiedad, [Propiedad | T], [NuevaPropiedad | NT]) :-
-	mod_lista_prop(Propiedad, NuevaPropiedad, T, NT).
-mod_lista_prop(Propiedad, NuevaPropiedad, [not(Propiedad) | T], [not(NuevaPropiedad) | NT]) :-
-	mod_lista_prop(Propiedad, NuevaPropiedad, T, NT).
-mod_lista_prop(Propiedad, NuevaPropiedad, [P | T], [P | NT]) :-
-	mod_lista_prop(Propiedad, NuevaPropiedad, T, NT).
+mp(Nombre, Propiedad, Valor, NuevoValor, [clase(Nombre, M, P, R) | T], [clase(Nombre, M, NP, R) | T]) :-
+	mod_lista(Propiedad, Valor, NuevoValor, P, NP).
+
+mp(Nombre, Propiedad, Valor, NuevoValor, [objeto(Nombre, M, P, R) | T], [objeto(Nombre, M, NP, R) | T]) :-
+	mod_lista(Propiedad, Valor, NuevoValor, P, NP).
+
+mp(Nombre, Propiedad, Valor, NuevaPropiedad, [E | T], [E | NT]) :-
+	mp(Nombre, Propiedad, Valor, NuevaPropiedad, T, NT).
+
 
 % Auxiliar: Modifiar una relacion.
-mr(_, _, [], []).
-mr(Relacion, NuevaRelacion, [clase(No, Pa, Pr, Re) | T], [clase(No, Pa, Pr, NRe) | NT]) :-
-	mod_lista_rel(Relacion, NuevaRelacion, Re, NRe), mr(Relacion, NuevaRelacion, T, NT).
-mr(Relacion, NuevaRelacion, [objeto(No, Pa, Pr, Re) | T], [objeto(No, Pa, Pr, NRe) | NT]) :-
-	mod_lista_rel(Relacion, NuevaRelacion, Re, NRe), mr(Relacion, NuevaRelacion, T, NT).
+mr(_, _, _, [], []).
 
-% Auxiliar: Modifica una lista de relaciones.
-mod_lista_rel(_, _, [], []).
-mod_lista_rel(Relacion, NuevaRelacion, [Relacion=>_ | T], [Relacion=>NuevaRelacion | NT]) :-
-	mod_lista_rel(Relacion, NuevaRelacion, T, NT).
-mod_lista_rel(Relacion, NuevaRelacion, [not(Relacion=>_) | T], [not(Relacion=>NuevaRelacion) | NT]) :-
-	mod_lista_rel(Relacion, NuevaRelacion, T, NT).
-mod_lista_rel(Relacion, NuevaRelacion, [R | T], [R | NT]) :-
-	mod_lista_rel(Relacion, NuevaRelacion, T, NT).
+mr(Nombre, Relacion, Valor, NuevoValor, [clase(Nombre, M, P, R) | T], [clase(Nombre, M, P, NR) | T]) :-
+	mod_lista(Relacion, Valor, NuevoValor, R, NR).
+
+mr(Nombre, Relacion, Valor, NuevoValor, [objeto(Nombre, M, P, R) | T], [objeto(Nombre, M, P, NR) | T]) :-
+	mod_lista(Relacion, Valor, NuevoValor, R, NR).
+
+mr(Nombre, Relacion, Valor, NuevoValor, [R | T], [R | NT]) :-
+	mr(Nombre, Relacion, Valor, NuevoValor, T, NT).
+
+% Auxiliar: Modifica una lista de propiedades.
+
+mod_lista(N, V, NV, L, LR) :-
+	modifica_lista(N, V, NV, L,  T), list_to_set(T, LR).
+	
+modifica_lista(_, _, _, [], []).
+
+modifica_lista(Nombre, Valor, NuevoValor, [Nombre=>Valor | T], [Nombre=>NuevoValor | T]).
+
+modifica_lista(Nombre, Valor, NuevoValor, [not(Nombre=>Valor) | T], [not(Nombre=>NuevoValor) | T]).
+
+modifica_lista(Nombre, _, NuevoValor, [Nombre | T], [NuevoValor | T]).
+
+modifica_lista(Nombre, _, NuevoValor, [not(Nombre) | T], [not(NuevoValor) | T]).
+
+modifica_lista(Nombre, Valor, NuevoValor, [P | T], [P | NT]) :-
+	modifica_lista(Nombre, Valor, NuevoValor, T, NT).
+
+% Auxiliar: Niga la propiedad de la entidad indicadada.
+
+np(_, _, _, [], []).
+
+np(Entidad, Propiedad, Valor, [clase(Entidad, M, P, R)], [clase(Entidad, M, NP, R)]) :-
+	neg_lista(Propiedad, Valor, P, NP).
+
+np(Entidad, Propiedad, Valor, [objeto(Entidad, M, P, R)], [objeto(Entidad, M, NP, R)]) :-
+	neg_lista(Propiedad, Valor, P, NP).
+
+np(Entidad, Propiedad, Valor, [E | T], [E | NT]) :-
+	np(Entidad, Valor, Propiedad, T, NT).
+
+% Auxiliar: Niega la relación de la entidad indicada.
+
+nr(_, _, _, [], []).
+
+nr(Entidad, Relacion, Valor, [clase(Entidad, M, N, R)], [clase(Entidad, M, N, NR)]) :-
+	neg_lista(Relacion, Valor, R, NR).
+
+nr(Entidad, Relacion, Valor, [objeto(Entidad, M, N, R)], [objeto(Entidad, M, N, NR)]) :-
+	neg_lista(Relacion, Valor, R, NR).
+
+nr(Entidad, Relacion, Valor, [E | T], [E | NT]) :-
+	nr(Entidad, Valor, Relacion, T, NT).
+
+% Auxiliar: Niega la propiedad o relacion indicada en la lista.
+
+neg_lista(_, _, [], []).
+
+neg_lista(Nombre, Valor, [Nombre=>Valor | T], [not(Nombre=>Valor) | T]).
+
+neg_lista(Nombre, Valor, [not(Nombre=>Valor) | T], [Nombre=>Valor | T]).
+
+neg_lista(Nombre, _, [Nombre | T], [not(Nombre) | T]).
+
+neg_lista(Nombre, _, [not(Nombre) | T], [Nombre | T]).
+
+neg_lista(Nombre, Valor, [H | T], [H | NT]) :-
+	neg_lista(Nombre, Valor, T, NT).

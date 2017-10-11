@@ -122,7 +122,8 @@ comando(nuevoObjeto(Nombre, Padre), Base, Base) :-
 	\+ verificarNuevoObjeto(objeto([Nombre], Padre, [], []), Base).
 comando(nuevoObjeto(nil, Padre), Base, NuevaBase) :-
 	generarId(Base, Id),
-	agregar(objeto([Id], Padre, [], []), Base, NuevaBase), !.
+	agregar(objeto([Id], Padre, [], []), Base, NuevaBase),
+	escribir(['El nuevo objeto podrá ser referenciado usando el identificador ', Id, '.']), !.
 comando(nuevoObjeto(Nombre, Padre), Base, NuevaBase) :-
 	is_list(Nombre), !,
 	agregar(objeto(Nombre, Padre, [], []), Base, NuevaBase).

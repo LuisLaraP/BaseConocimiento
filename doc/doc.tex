@@ -1,22 +1,33 @@
 \documentclass[11pt]{article}
 
-\newcommand{\bt}{\begin{alltt}}
-\newcommand{\et}{\end{alltt}}
-
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
-
 \usepackage[letterpaper,
             portrait,
             margin=2cm]{geometry}
-
-
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{enumerate}
+\usepackage{enumitem}
 \usepackage{alltt}
 \usepackage{import}
+
+\setlist[itemize]{noitemsep, topsep=0pt}
+
+\newcommand{\bt}{\begin{alltt}}
+\newcommand{\et}{\end{alltt}}
+\newcommand{\comando}[2]{
+    \textbf{#1}(#2)\\
+}
+
+\newenvironment{args}{
+    Argumentos:
+    \begin{itemize}
+}{
+    \end{itemize}
+    \bigskip
+}
 
 \setlength{\parindent}{0pt}
 
@@ -38,19 +49,38 @@ Este proyecto contiene un intérprete de comandos escrito en Prolog, el cual es 
 Para iniciar la aplicación, consultar el archivo \texttt{iniciar.pl} y realizar una consulta al predicado \texttt{iniciar}, ejecutando los siguientes comandos dentro del \textit{listener} de SWI-Prolog:
 
 \bt
-    ?. [main].
-    ?. iniciar.
-    |:
+?. [main].
+?. iniciar.
+|:
 \et
 
 O bien, el intérprete puede ser ejecutado directamente desde una terminal, con el siguiente comando:
 
 \bt
-    swipl -f main.pl -g "iniciar, halt."
+swipl -f main.pl -g "iniciar, halt."
 \et
 
 Una vez iniciado el intérprete, el \textit{prompt} usual de Prolog cambiará a '\texttt{|:}'. Esto indica que ya pueden introducirse comandos.
 
 Inicialmente, se crea una base de conocimiento vacía, la cual puede ser modificada con los comandos presentados en la siguiente sección.
+
+\section{Referencia de comandos}
+
+\subsection{Utilitarios}
+
+\comando{cargar}{+Nombre}
+Lee una base desde el archivo dado y la carga como la base de conocimiento actual.\\
+\begin{args}
+    \item Nombre. Nombre del archivo a leer. Este archivo debe existir dentro del directorio \texttt{bases}.
+\end{args}
+
+\comando{guardar}{+Nombre}
+Guarda todos los contenidos de la base actual en un archivo, dentro del directorio \textit{bases}. Si el archivo no existe, se creará; si ya existe, todos sus contenidos previos se perderán.\\
+\begin{args}
+    \item Nombre. Nombre del archivo a escribir.
+\end{args}
+
+\textbf{ver}\\
+Imprime todos los contenidos de la base actual en pantalla.
 
 \end{document}

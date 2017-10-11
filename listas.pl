@@ -151,3 +151,41 @@ actualiza([],L,L).
 actualiza([X|T],L,F) :-
 	cambia(X,L,R),
 	actualiza(T,R,F),!.
+
+quitaProps([],[]).
+quitaProps([X:_|T],[X|R]) :-
+	quitaProps(T,R),!.
+quitaProps([no(X:_)|T],[X|R]):-
+	quitaProps(T,R),!.
+
+% verifica si X es elemento de una lista
+miembro(X,[X|_]).
+miembro(X,[_|Xs]) :- miembro(X,Xs),!.
+
+% verifica si todos los elementos de una lista son diferentes
+todosDiferentes([]).
+todosDiferentes([X|T]) :-
+	\+ miembro(X,T),
+	todosDiferentes(T).
+
+
+revisaDefaults(L,L) :-
+	quitaProps(L,R),
+	todosDiferentes(R),!.
+
+revisaDefaults([X:si|T],[X:si|R]) :-
+	eliminar(X:no,T,C),
+	revisaDefaults(C,R),!.
+
+revisaDefaults([X:no|T],[X:no|R]) :-
+	eliminar(X:si,T,C),
+	revisaDefaults(C,R),!.
+
+revisaDefaults([X:Y|T],[X:Y|R]) :-
+	eliminarTodos([no(X:Y),X:_],T,C),
+	revisaDefaults(C,R),!.
+
+revisaDefaults([no(X:Y)|T],[no(X:Y)|R]) :-
+	eliminar(X:Y,T,C),
+	revisaDefaults(C,R),!.
+

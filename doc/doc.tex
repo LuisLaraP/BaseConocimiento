@@ -18,9 +18,7 @@
 \usepackage{alltt}
 \usepackage{import}
 
-
-
-%\usepackage{hyperref}
+\setlength{\parindent}{0pt}
 
 \title{Inteligencia Artificial 2018-1 \\ Proyecto1: Representación del Conocimiento\\
 \small{IIMAS-PCIC}}
@@ -33,13 +31,26 @@ Alejandro Ehécatl Morales Huitrón}
 
 \maketitle
 
-(explicación del uso del intérprete).
+\section{Funcionamiento del proyecto}
 
-Para iniciar el intérprete de nuetro proyecto:
+Este proyecto contiene un intérprete de comandos escrito en Prolog, el cual es la base del funcionamiento del mismo.
+
+Para iniciar la aplicación, consultar el archivo \texttt{iniciar.pl} y realizar una consulta al predicado \texttt{iniciar}, ejecutando los siguientes comandos dentro del \textit{listener} de SWI-Prolog:
+
 \bt
-?. [main].
-?. iniciar.
-|:
+    ?. [main].
+    ?. iniciar.
+    |:
 \et
+
+O bien, el intérprete puede ser ejecutado directamente desde una terminal, con el siguiente comando:
+
+\bt
+    swipl -f main.pl -g "iniciar, halt."
+\et
+
+Una vez iniciado el intérprete, el \textit{prompt} usual de Prolog cambiará a '\texttt{|:}'. Esto indica que ya pueden introducirse comandos.
+
+Inicialmente, se crea una base de conocimiento vacía, la cual puede ser modificada con los comandos presentados en la siguiente sección.
 
 \end{document}

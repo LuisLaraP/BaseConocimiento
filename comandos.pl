@@ -266,16 +266,18 @@ comando(borrarRelObjeto(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
 % Utilidades ------------------------------------------------------------------
 
 % Lee una base desde el archivo dado.
-%	Ruta: Ruta del archivo a leer.
-comando(cargar(Ruta), _, NuevaBase) :-
+%	Nombre: Nombre de la base a leer.
+comando(cargar(Nombre), _, NuevaBase) :-
+	atom_concat('bases/', Nombre, Ruta),
 	open(Ruta, read, Archivo),
 	read(Archivo, NuevaBase),
 	close(Archivo).
 
 % Escribe la base actual en el archivo dado. Si el archivo no existe, se
 % creará. Si ya existe, todo su contenido se sobreescribirá.
-%	Ruta: Ruta del archivo a escribir.
-comando(guardar(Ruta), Base, Base) :-
+%	Nombre: Nombre de la base a escribir.
+comando(guardar(Nombre), Base, Base) :-
+	atom_concat('bases/', Nombre, Ruta),
 	open(Ruta, write, Archivo),
 	writeq(Archivo, Base),
 	put_char(Archivo, .),

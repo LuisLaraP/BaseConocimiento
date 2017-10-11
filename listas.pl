@@ -2,11 +2,11 @@
 % Universidad Nacional Autónoma de México
 % Inteligencia Artificial
 %
-% Proyecto 1 - Representación del comocimiento
+% Proyecto 1 - Representación del conocimiento
 %
 % Luis Alejandro Lara Patiño
 % Roberto Monroy Argumedo
-% Alejandro Morales Huitrón
+% Alejandro Ehecatl Morales Huitrón
 %
 % listas.pl
 % Predicados para realizar operaciones sobre listas.
@@ -101,7 +101,92 @@ reemplazar(_, _, [], []).
 reemplazar(Original, Nuevo, [Original | R], [Nuevo | NuevaCola]) :-
 	reemplazar(Original, Nuevo, R, NuevaCola), !.
 reemplazar(Original, Nuevo, [C | R], [C | NuevaCola]) :-
-	reemplazar(Original, Nuevo, R, NuevaCola), !.
+	reemplazar(Original, Nuevo, R, NuevaCola), !.	
+
+%concatena dos listas
+concatena([],L,L).
+concatena([H|L1],L2,[H|L3]):- concatena(L1,L2,L3).
+
+ponSi([],[]).
+ponSi([H|T],[H:si|C]):-
+    ponSi(T,C),!.
+
+ponNo([],[]).
+ponNo([H|T],[H:no|C]):-
+    ponNo(T,C),!.
+
+ponClase([],_,[]).
+ponClase([H|T],X,[H:X|C]):-
+    ponClase(T,X,C),!.
+
+ponClaseNo([],_,[]).
+ponClaseNo([H|T],X,[no(H:X)|C]):-
+    ponClaseNo(T,X,C),!.
+
+cambia(_,[],[]).
+cambia(X:si,[X:no|T],[X:si|F]):-
+	cambia(X:si,T,F),!.
+cambia(X:si,[B|T],[B|F]):-
+	cambia(X:si,T,F),!.
+
+cambia(X:no,[X:si|T],[X:no|F]):-
+	cambia(X:no,T,F),!.
+cambia(X:no,[B|T],[B|F]):-
+	cambia(X:no,T,F),!.
+
+cambia(X:Y,[no(X:Y)|T],[X:Y|F]):-
+	cambia(X:Y,T,F),!.
+cambia(X:Y,[X:_|T],[X:Y|F]):-
+	cambia(X:Y,T,F),!.
+cambia(X:Y,[B|T],[B|F]):-
+	cambia(X:Y,T,F),!.
+
+cambia(no(X:Y),[X:Y|T],[no(X:Y)|F]):-
+	cambia(no(X:Y),T,F),!.
+cambia(no(X:Y),[B|T],[B|F]):-
+	cambia(no(X:Y),T,F),!.
+
+actualiza([],L,L).
+actualiza([X|T],L,F) :-
+	cambia(X,L,R),
+	actualiza(T,R,F),!.
+
+quitaProps([],[]).
+quitaProps([X:_|T],[X|R]) :-
+	quitaProps(T,R),!.
+quitaProps([no(X:_)|T],[X|R]):-
+	quitaProps(T,R),!.
+
+% verifica si X es elemento de una lista
+miembro(X,[X|_]).
+miembro(X,[_|Xs]) :- miembro(X,Xs),!.
+
+% verifica si todos los elementos de una lista son diferentes
+todosDiferentes([]).
+todosDiferentes([X|T]) :-
+	\+ miembro(X,T),
+	todosDiferentes(T).
+
+
+revisaDefaults(L,L) :-
+	quitaProps(L,R),
+	todosDiferentes(R),!.
+
+revisaDefaults([X:si|T],[X:si|R]) :-
+	eliminar(X:no,T,C),
+	revisaDefaults(C,R),!.
+
+revisaDefaults([X:no|T],[X:no|R]) :-
+	eliminar(X:si,T,C),
+	revisaDefaults(C,R),!.
+
+revisaDefaults([X:Y|T],[X:Y|R]) :-
+	eliminarTodos([no(X:Y),X:_],T,C),
+	revisaDefaults(C,R),!.
+
+revisaDefaults([no(X:Y)|T],[no(X:Y)|R]) :-
+	eliminar(X:Y,T,C),
+	revisaDefaults(C,R),!.
 
 % Elimina de la primera lista todos los elementos que aparecen en la segunda.
 % Actúa como una resta de lista.

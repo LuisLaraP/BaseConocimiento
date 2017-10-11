@@ -2,11 +2,11 @@
 % Universidad Nacional Autónoma de México
 % Inteligencia Artificial
 %
-% Proyecto 1 - Representación del comocimiento
+% Proyecto 1 - Representación del conocimiento
 %
 % Luis Alejandro Lara Patiño
 % Roberto Monroy Argumedo
-% Alejandro Morales Huitrón
+% Alejandro Ehecatl Morales Huitrón
 %
 % comandos.pl
 % Contiene los comandos que sirven de interfaz al usuario en el intérprete.
@@ -287,3 +287,51 @@ comando(guardar(Nombre), Base, Base) :-
 % Imprime todos los objetos actualmente almacenados en la base de conocimiento.
 comando(ver, Base, Base) :-
 	imprimirLista(Base).
+	
+	
+% Comandos de consulta-------------------------------------------------------
+
+% Extensión de una clase:
+comando(extClase(Clase),Base,Base) :-
+	extensionClase(Clase,Base,R),
+	write(R),nl.
+
+% Extensión de una propiedad
+comando(extProp(Propiedad),Base,Base) :-
+	eProp(Propiedad,Base,R),
+	write(R),nl.
+
+% Extensión de una relación
+comando(extRel(Relacion),Base,Base) :-
+	eRel(Relacion,Base,R),
+	write(R),nl.
+
+% Clases a las que pertenece un objeto 
+comando(clasesObj(Objeto),Base,Base) :-
+	filtrar(objetoSeLlama(Objeto),Base,[Ob]),
+	clasesObjeto(Ob,Base,R),
+	write(R),nl.
+
+% Propiedades de un objeto
+comando(propsObjeto(Objeto),Base,Base) :-
+	filtrar(objetoSeLlama(Objeto),Base,[Ob]),
+	propiedadesObjeto(Ob,R),
+	write(R),nl.
+
+% Propiedades de una clase
+comando(propsClase(Clase),Base,Base) :-
+	buscar(clase(Clase,_,_,_),Base,Cl),
+	propiedadesClase(Cl,R),
+	write(R),nl.
+
+% Relaciones de un objeto
+comando(relsObjeto(Objeto),Base,Base) :-
+	filtrar(objetoSeLlama(Objeto),Base,[Ob]),
+	relacionesObjeto(Ob,R),
+	write(R),nl.
+
+% Relaciones de una clase
+comando(relsClase(Clase),Base,Base) :-
+	buscar(clase(Clase,_,_,_),Base,Cl),
+	relacionesClase(Cl,R),
+	write(R),nl.

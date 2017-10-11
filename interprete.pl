@@ -15,7 +15,7 @@
 
 interprete :-
 	repeat,
-	read(Comando),
+	catch(read(Comando), Error, (imprimirExcepcion(Error), interprete)),
 	(Comando \= end_of_file, Comando \= salir ->
 		kb(Base),
 		call(comando(Comando), Base, NuevaBase),
@@ -25,3 +25,6 @@ interprete :-
 		fail;
 		!
 	).
+
+imprimirExcepcion(Excepcion) :-
+	print_message(error, Excepcion).

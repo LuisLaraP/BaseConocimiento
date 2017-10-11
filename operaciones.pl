@@ -30,6 +30,15 @@ agregarRelacionObjetos([objeto(N, P, Props, Rels) | R], Rel, Base, NBase) :-
 agregarRelacionObjetos([_ | R], Rel, Base, NBase) :-
 	agregarRelacionObjetos(R, Rel, Base, NBase).
 
+generarId(Base, NuevoId) :-
+	generarId(Base, 1, NuevoId).
+generarId(Base, Num, NuevoId) :-
+	atom_concat('anonimo', Num, NuevoId),
+	\+ existeObjeto(NuevoId, Base).
+generarId(Base, Num, NuevoId) :-
+	Sig is Num + 1,
+	generarId(Base, Sig, NuevoId).
+
 verificarNuevaClase(clase(_, nil, _, _), Base) :-
 	buscar(clase(_, nil, _, _), Base, _),
 	error(['No puede haber más de una clase raíz.']), !, fail.

@@ -121,7 +121,8 @@ comando(nuevaRelClase(Nombre, Relacion, Objetivo, no), Base, NuevaBase) :-
 comando(nuevoObjeto(Nombre, Padre), Base, Base) :-
 	\+ verificarNuevoObjeto(objeto([Nombre], Padre, [], []), Base).
 comando(nuevoObjeto(nil, Padre), Base, NuevaBase) :-
-	agregar(objeto([], Padre, [], []), Base, NuevaBase), !.
+	generarId(Base, Id),
+	agregar(objeto([Id], Padre, [], []), Base, NuevaBase), !.
 comando(nuevoObjeto(Nombre, Padre), Base, NuevaBase) :-
 	is_list(Nombre), !,
 	agregar(objeto(Nombre, Padre, [], []), Base, NuevaBase).

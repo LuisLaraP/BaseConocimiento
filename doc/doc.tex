@@ -22,6 +22,7 @@
 }
 
 \newenvironment{args}{
+    \newline
     Argumentos:
     \begin{itemize}
 }{
@@ -66,16 +67,112 @@ Inicialmente, se crea una base de conocimiento vacía, la cual puede ser modific
 
 \section{Referencia de comandos}
 
+\subsection{Para agregar información}
+
+\comando{nuevaClase}{Nombre, Padre}
+Crea una nueva clase en la base de conocimiento, con el nombre y la clase padre especificados. Este comando verifica que no exista una clase con el mismo nombre previamente.
+\begin{args}
+    \item Nombre. Nombre de la nueva clase.
+    \item Padre. Nombre de la clase padre. Se verifica que esta clase exista. En el caso de la clase raíz, este parámetro debe ser \texttt{nil}. El sistema verifica que solamente exista una clase raíz.
+\end{args}
+
+\comando{nuevoObjeto}{Nombre, Padre}
+Crea un nuevo objeto en la base de conocimiento. El comando verifica que la clase padre exista.
+\begin{args}
+    \item Nombre. Nombre del nuevo objeto. Puede ser un nombre único, una lista de nombres o bien, puede crearse un objeto anónimo usando la palabra \texttt{nil}. En el caso de un objeto anónimo, el sistema generará un identificador único para el mismo, el cual será desplegado en pantalla y podrá utilizarse para referenciar al objeto con otros comandos.
+    \item Padre. Clase a la cual pertenece el nuevo objeto. Esta clase debe existir en la base de conocimiento.
+\end{args}
+
+\comando{nuevaPropClase}{Nombre, Propiedad, [Valor], [no]}
+Agrega una nueva propiedad a la clase especificada. El sistema verifica que la clase no contenga previamente dicha propiedad, aun en su forma negada.
+\begin{args}
+    \item Nombre. Nombre de la clase a modificar. Esta clase debe existir en la base.
+    \item Propiedad. Nombre de la nueva propiedad. La clase en cuestión no debe tener previamente esta propiedad, en ninguna de sus formas.
+    \item Valor (Opcional). El valor que tendrá la nueva propiedad. Si no se especifica, la nueva propiedad se agregará sin valor.
+    \item Negación (Opcional). Si se desea que la nueva propiedad se introduzca en su forma negada, proporcionar la palabra \texttt{no} como último parámetro del comando.
+\end{args}
+
+\comando{nuevaPropObjeto}{Nombre, Propiedad, [Valor], [no]}
+Agrega una nueva propiedad a todos los objetos con el nombre especificado. El sistema verifica que los objetos no contengan previamente dicha propiedad, aun en su forma negada.
+\begin{args}
+    \item Nombre. Nombre o lista de nombres del objeto a modificar. Debe haber por lo menos un objeto con dicho nombre.
+    \item Propiedad. Nombre de la nueva propiedad.
+    \item Valor (Opcional). El valor que tendrá la nueva propiedad. Si no se especifica, la nueva propiedad se agregará sin valor.
+    \item Negación (Opcional). Si se desea que la nueva propiedad se introduzca en su forma negada, proporcionar la palabra \texttt{no} como último parámetro del comando.
+\end{args}
+
+\comando{nuevaRelClase}{Nombre, Relacion, Objetivo, [no]}
+Agrega una nueva relación a la clase especificada. El sistema verifica que la clase no contenga previamente dicha relación con el mismo objetivo, aun en su forma negada.
+\begin{args}
+    \item Nombre. Nombre de la clase a modificar. Esta clase debe existir en la base de conocimiento.
+    \item Relación. Nombre de la nueva relación.
+    \item Objetivo. Clase u objeto con el cual se entabla la nueva relación.
+    \item Negación (Opcional). Si se desea que la nueva relación se agregue en su forma negada, proporcional el valor \texttt{no} en este argumento.
+\end{args}
+
+\comando{nuevaRelObjeto}{Nombre, Relacion, Objetivo, [no]}
+Agrega una nueva relación a todos los objetos con el nombre especificado. El sistema verifica que los objetos no contengan previamente dicha relación con el mismo objetivo, aun en su forma negada.
+\begin{args}
+    \item Nombre. Nombre o lista de nombres del objeto a modificar. Debe haber por lo menos un objeto con dicho nombre.
+    \item Relación. Nombre de la nueva relación.
+    \item Objetivo. Clase u objeto con el cual se entabla la nueva relación.
+    \item Negación (Opcional). Si se desea que la nueva relación se agregue en su forma negada, proporcional el valor \texttt{no} en este argumento.
+\end{args}
+
+\subsection{Para eliminar información}
+
+\comando{borrarClase}{Nombre}
+Elimina la clase con el nombre especificado de la base de conocimiento. Dicha clase debe estar en la base de conocimiento.
+\begin{args}
+    \item Nombre. Nombre de la clase a eliminar.
+\end{args}
+
+\comando{borrarObjeto}{Nombre}
+Elimina todos los objetos con el nombre especificado de la base de conocimiento.
+\begin{args}
+    \item Nombre. Nombre del objeto a eliminar. Puede ser un nombre único o una lista de nombres.
+\end{args}
+
+\comando{borrarPropClase}{Nombre, Propiedad}
+Elimina una propiedad de una clase. Dicha clase debe estar en la base de conocimiento, y tener la propiedad mencionada. Se eliminará cualquier forma de la propiedad: negada, no negada, con valor o sin valor.
+\begin{args}
+    \item Nombre. Nombre de la clase a modificar.
+    \item Propiedad. Nombre de la propiedad a eliminar.
+\end{args}
+
+\comando{borrarPropObjeto}{Nombre, Propiedad}
+Elimina una propiedad de todos los objetos con el nombre especificado. Debe haber por lo menos un objeto con el nombre especificado, y éstos deben tener la propiedad mencionada. Se eliminará cualquier forma de la propiedad: negada, no negada, con valor o sin valor.
+\begin{args}
+    \item Nombre. Nombre del objeto a modificar. Puede ser un nombre único, o una lista de nombres.
+    \item Propiedad. Nombre de la propiedad a eliminar.
+\end{args}
+
+\comando{borrarRelClase}{Nombre, Relacion, Objetivo}
+Elimina una relación de la clase especificada. La relación se eliminará solamente si tiene el objetivo dado. La clase en cuestión debe existir, y tener la relación mencionada con el objetivo dado.
+\begin{args}
+    \item Nombre. Nombre de la clase a modificar.
+    \item Relación. Nombre de la relación a eliminar.
+    \item Objetivo. Clase u objeto con el cual se tiene la relación a eliminar.
+\end{args}
+
+\comando{borrarRelObjeto}{Nombre, Relacion, Objetivo}
+Elimina una relación de todos los objetos con el nombre especificado. La relación se eliminará solamente si tiene el objetivo dado. Debe haber por lo menos un objeto con el nombre dado, y éstos deben tener la relación mencionada con el objetivo dado.
+\begin{args}
+    \item Nombre. Nombre del objeto a modificar. Puede ser un nombre único, o una lista de nombres.
+    \item Relación. Nombre de la relación a eliminar.
+    \item Objetivo. Clase u objeto con el cual se tiene la relación a eliminar.
+\end{args}
+
 \subsection{Utilitarios}
 
-\comando{cargar}{+Nombre}
-Lee una base desde el archivo dado y la carga como la base de conocimiento actual.\\
+\comando{cargar}{Nombre}
+Lee una base desde el archivo dado y la carga como la base de conocimiento actual.
 \begin{args}
     \item Nombre. Nombre del archivo a leer. Este archivo debe existir dentro del directorio \texttt{bases}.
 \end{args}
 
-\comando{guardar}{+Nombre}
-Guarda todos los contenidos de la base actual en un archivo, dentro del directorio \textit{bases}. Si el archivo no existe, se creará; si ya existe, todos sus contenidos previos se perderán.\\
+\comando{guardar}{Nombre}
+Guarda todos los contenidos de la base actual en un archivo, dentro del directorio \textit{bases}. Si el archivo no existe, se creará; si ya existe, todos sus contenidos previos se perderán.
 \begin{args}
     \item Nombre. Nombre del archivo a escribir.
 \end{args}

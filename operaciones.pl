@@ -125,7 +125,7 @@ eliminarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, Base, NuevaBa
 
 eliminarRelacionObjetos([], _, _, Base, Base).
 eliminarRelacionObjetos([objeto(N, P, Props, R) | Rs], Relacion, Objetivo, Base, NuevaBase) :-
-	eliminar(Relacion => Objetivo, R, NR),
+	eliminarRelacion(Relacion, Objetivo, R, NR),
 	reemplazar(objeto(N, P, Props, R), objeto(N, P, Props, NR), Base, Temp),
 	eliminarRelacionObjetos(Rs, Relacion, Objetivo, Temp, NuevaBase).
 

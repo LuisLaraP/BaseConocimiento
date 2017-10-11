@@ -2,7 +2,7 @@
 % Universidad Nacional Autónoma de México
 % Inteligencia Artificial
 %
-% Proyecto 1 - Representación del comocimiento
+% Proyecto 1 - Representación del conocimiento
 %
 % Luis Alejandro Lara Patiño
 % Roberto Monroy Argumedo

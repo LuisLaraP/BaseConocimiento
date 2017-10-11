@@ -177,7 +177,18 @@ comando(nuevaRelObjeto(Nombre, Relacion, Objetivo), Base, Base) :-
 	\+ verificarNuevaRelacionObjeto(Nombre, Relacion, Objetivo, Base).
 comando(nuevaRelObjeto(Nombre, Relacion, Objetivo), Base, NuevaBase) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
-	agregarRelacionObjetos(Objetos, Relacion, Objetivo, Base, NuevaBase).
+	agregarRelacionObjetos(Objetos, Relacion => Objetivo, Base, NuevaBase).
+
+% Agrega una nueva relacion negada a todos los objetos con el nombre
+% especificado.
+%	Nombre - Nombre del objeto a modificar.
+%	Relacion - Nombre de la nueva relación.
+%	Objetivo - Entidad con la cual establecer la relación.
+comando(nuevaRelObjeto(Nombre, Relacion, Objetivo, no), Base, Base) :-
+	\+ verificarNuevaRelacionObjeto(Nombre, Relacion, Objetivo, Base).
+comando(nuevaRelObjeto(Nombre, Relacion, Objetivo, no), Base, NuevaBase) :-
+	filtrar(objetoSeLlama(Nombre), Base, Objetos),
+	agregarRelacionObjetos(Objetos, not(Relacion => Objetivo), Base, NuevaBase).
 
 % Comandos para eliminar ------------------------------------------------------
 

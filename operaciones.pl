@@ -22,14 +22,13 @@ agregarPropiedadObjetos([objeto(N, P, Props, R) | Rs], Propiedad, Base, NBase) :
 	reemplazar(objeto(N, P, Props, R), objeto(N, P, NuevasProps, R), Base, Temp),
 	agregarPropiedadObjetos(Rs, Propiedad, Temp, NBase).
 
-agregarRelacionObjetos([], _, _, Base, Base).
-agregarRelacionObjetos([objeto(N, P, Props, Rels) | R], Rel, Obj, Base, NBase) :-
-	\+ estaEn(Rels, Rel => Obj),
-	agregar(Rel => Obj, Rels, NuevasRels), !,
+agregarRelacionObjetos([], _, Base, Base).
+agregarRelacionObjetos([objeto(N, P, Props, Rels) | R], Rel, Base, NBase) :-
+	agregar(Rel, Rels, NuevasRels), !,
 	reemplazar(objeto(N, P, Props, Rels), objeto(N, P, Props, NuevasRels), Base, Temp),
-	agregarRelacionObjetos(R, Rel, Obj, Temp, NBase).
-agregarRelacionObjetos([_ | R], Rel, Obj, Base, NBase) :-
-	agregarRelacionObjetos(R, Rel, Obj, Base, NBase).
+	agregarRelacionObjetos(R, Rel, Temp, NBase).
+agregarRelacionObjetos([_ | R], Rel, Base, NBase) :-
+	agregarRelacionObjetos(R, Rel, Base, NBase).
 
 verificarNuevaClase(clase(_, nil, _, _), Base) :-
 	buscar(clase(_, nil, _, _), Base, _),
@@ -88,9 +87,9 @@ verificarNuevaRelacionObjeto(Nombre, Relacion, Objetivo, Base) :-
 	filtrar(objetoSeLlama(Nombre), Base, Objetos),
 	filtrar(objetoTieneRelacion(Relacion, Objetivo), Objetos, Filtrada),
 	Filtrada \= [],
-	advertencia(['Los siguientes objetos ya tienen la relación ', Relacion,
+	error(['Los siguientes objetos ya tienen la relación ', Relacion,
 		' con ', Objetivo, ':']),
-	imprimirLista(Filtrada).
+	imprimirLista(Filtrada), !, fail.
 verificarNuevaRelacionObjeto(_, _, Objetivo, Base) :-
 	\+ existeEntidad(Objetivo, Base),
 	error(['No se conoce la clase o el objeto ', Objetivo, '.']), !, fail.
@@ -259,3 +258,5 @@ claseTieneRelacion(Relacion, Objetivo, clase(_, _, _, Rels)) :-
 
 objetoTieneRelacion(Relacion, Objetivo, objeto(_, _, _, Rels)) :-
 	estaEn(Rels, Relacion => Objetivo).
+objetoTieneRelacion(Relacion, Objetivo, objeto(_, _, _, Rels)) :-
+	estaEn(Rels, not(Relacion => Objetivo)).

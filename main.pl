@@ -2,11 +2,11 @@
 % Universidad Nacional Autónoma de México
 % Inteligencia Artificial
 %
-% Proyecto 1 - Representación del comocimiento
+% Proyecto 1 - Representación del conocimiento
 %
 % Luis Alejandro Lara Patiño
 % Roberto Monroy Argumedo
-% Alejandro Morales Huitrón
+% Alejandro Ehecatl Morales Huitrón
 %
 % main.pl
 % Punto de entrada a la aplicación. Para ejecutar este programa, realizar la
@@ -20,8 +20,11 @@
 :- [listas].
 :- [operaciones].
 :- [utilidades].
-
+:- [consultas].
+:- [modificar].
+	
 :- op(800, xfx, '=>').
 
 iniciar :-
-	interprete([]).
+	assert(kb([])),
+	interprete.

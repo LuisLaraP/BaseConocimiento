@@ -1,4 +1,17 @@
-:- op(800, xfx, '=>').
+% =============================================================================
+% Universidad Nacional Autónoma de México
+% Inteligencia Artificial
+%
+% Proyecto 1 - Representación del conocimiento
+%
+% Luis Alejandro Lara Patiño
+% Roberto Monroy Argumedo
+% Alejandro Ehecatl Morales Huitrón
+%
+% modificar.pl
+% Contiene los comandos que sirven para modificar la información de la base de conocimiento.
+% =============================================================================
+%:- op(800, xfx, '=>').
 
 % Modificar el nombre de una clase. Falla si se repite el nombre
 modificar_nombre_clase(_, NuevoNom, Base, Base) :- \+unico(NuevoNom, Base).

@@ -19,7 +19,7 @@ interprete :-
 	(Comando \= end_of_file, Comando \= salir ->
 		kb(Base),
 		call(comando(Comando), Base, NuevaBase),
-		retract(kb(_)),
+		retract(kb(Base)),
 		assert(kb(NuevaBase)),
 		call(comando(guardar(backup)), NuevaBase, _),
 		fail;

@@ -21,6 +21,7 @@
 :- [operaciones].
 :- [utilidades].
 :- [consultas].
+:- [modificar].
 
 :- op(800, xfx, '=>').
 

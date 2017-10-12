@@ -281,7 +281,7 @@ comando(extRel(Relacion),Base,Base) :-
 	eRel(Relacion,Base,R),
 	write(R),nl.
 
-% Clases a las que pertenece un objeto 
+% Clases a las que pertenece un objeto
 comando(clasesObj(Objeto),Base,Base) :-
 	filtrar(objetoSeLlama(Objeto),Base,[Ob]),
 	clasesObjeto(Ob,Base,R),
@@ -306,6 +306,46 @@ comando(relsObjeto(Objeto),Base,Base) :-
 comando(relsClase(Clase),Base,Base) :-
 	relacionesClaseHerencia(Clase,Base,R),
 	write(R),nl.
+
+% Modifica el nombre de una clase
+comando(modificarNombreClase(AntiguoNom, NuevoNom), Base, NuevaBase) :-
+	modificar_nombre_clase(AntiguoNom, NuevoNom, Base, NuevaBase).
+
+% Modificar el nombre de un objeto.
+comando(modificarNombreObjeto(AntiguoNom, NuevoNom), Base, NuevaBase) :-
+	modificar_nombre_objeto(AntiguoNom, NuevoNom, Base, NuevaBase).
+
+% Modificar propiedad de una clase u objeto.
+comando(modificarPropiedad(Entidad, Propiedad, NuevoValor), Base, NuevaBase) :-
+	modificar_propiedad(Entidad, Propiedad, NuevoValor, Base, NuevaBase).
+
+%Modificar proiedad con valor especifico de una clase u objeto.
+comando(modificarPropiedad(Entidad, Propiedad, ViejoValor, NuevoValor), Base, NuevaBase) :-
+	modificar_propiedad(Entidad, Propiedad, ViejoValor, NuevoValor, Base, NuevaBase).
+
+% Modifica relacion de una clase u objeto.
+comando(modificarRelacion(Entidad, Relacion, NuevoValor), Base, NuevaBase) :-
+	modificar_relacion(Entidad, Relacion, NuevoValor, Base, NuevaBase).
+
+% Modifica relacion con un valor especifico de una calse u objeto.
+comando(modificarRelacion(Entidad, Relacion, ViejoValor, NuevoValor), Base, NuevaBase) :-
+	modificar_relacion(Entidad, Relacion, ViejoValor, NuevoValor, Base, NuevaBase).
+
+% Niega una propiedad de una clase u objeto.
+comando(negarPropiedad(Entidad, Propiedad), Base, NuevaBase) :-
+	negar_propiedad(Entidad, Propiedad, Base, NuevaBase).
+
+% Niega una propiedad de una clase u objeto.
+comando(negarPropiedad(Entidad, Propiedad, Valor), Base, NuevaBase) :-
+       negar_propiedad(Entidad, Propiedad, Valor, Base, NuevaBase).
+
+% Nieha una propiedad de una clase u objeto.
+comando(negarRelacion(Entidad, Relacion), Base, NuevaBase) :-
+	negar_relacion(Entidad, Relacion, Base, NuevaBase).
+
+% Nieha una propiedad de una clase u objeto.
+comando(negarRelacion(Entidad, Relacion, Valor), Base, NuevaBase) :-
+       negar_relacion(Entidad, Relacion, Valor, Base, NuevaBase).
 
 
 % Utilidades ------------------------------------------------------------------

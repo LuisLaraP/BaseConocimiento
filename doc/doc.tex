@@ -69,6 +69,86 @@ Inicialmente, se crea una base de conocimiento vacía, la cual puede ser modific
 
 \section{Referencia de comandos}
 
+\subsection{Para consultar información}
+
+\comando{extClase}{Clase}
+Muestra en una lista el conjunto de todos los objetos que pertenecen a una clase (cada objeto con 
+su lista de nombres) ya sea que se hayan declarado directamente o están en la cerradura de la relación de 
+herencia.
+\begin{args}
+    \item Clase. Nombre de la clase a extender.
+\end{args}
+
+\comando{extProp}{Propiedad}
+Muestra en una lista el conjunto de todos los objetos que tienen una propiedad específica ya sea
+por declaración directa o por herencia. Además se indica su valor.
+\begin{args}
+    \item Propiedad. Nombre de la propiedad a extender.
+\end{args}
+Ejemplo:\\
+En una base de conocimiento de animales parecida a los ejemplos de la clase, si tenemos una propiedad
+\textit{color=>negro} que tienen los ornitorrincos pero no los lemures, y además \textit{orni} es un
+ornitorrinco y \textit{juan} es un lémur:
+\bt
+|: extProp(color).
+[orni:negro,no(juan:negro)]
+\et
+
+\comando{extRel}{Relación}
+Muestra en una lista el conjunto de todos los objetos que tienen una relación específica ya sea
+por declaración directa o por herencia. Además indica con quién están relacionados.
+\begin{args}
+    \item relación. Nombre de la relación a extender.
+\end{args}
+Ejemplo:\\
+Si tenemos la relación \textit{amigo=>juan} en el objeto \textit{orni} del ejemplo pasado:
+\bt
+|: extRel(amigo).
+[orni:juan]
+\et
+
+Cabe mencionar que tanto \textbf{extProp} como \textbf{extRel} dan respuestas adecuadas 
+en caso de que haya defaults y excepciones. Por ejemplo si en la clase aves hay una propiedad
+\textit{tamaño=>nil} y un objeto ''chucho`` de su subclase águilas tiene la propiedad 
+\textit{tamaño=>largo} entonces la salida de la extensión de la propiedad tamaño será:
+\bt
+[chucho:largo,otro1:nil,otro2:nil]
+\et
+donde \emph{otro1} y \emph{otro2} son objetos de alguna subclase de aves diferente de águilas.\\
+
+\comando{clasesObj}{Objeto}
+Muestra todas las clases a las que pertenece un objeto incluidas los ancestros, es decir, las
+clases en el camino hacia la raíz desde la clase a la que pertenece el objeto.
+\begin{args}
+    \item Objeto. Nombre del objeto a consultar.
+\end{args}
+
+\comando{propsObjeto}{Objeto}
+Muestra todas las propiedades de un objeto declaradas directamente o por herencia.
+\begin{args}
+    \item Objeto. Nombre del objeto a consultar.
+\end{args}
+
+\comando{propsClase}{Clase}
+Muestra todas las propiedades de una clase declaradas directamente o por herencia.
+\begin{args}
+    \item Clase. Nombre de la clase consultar.
+\end{args}
+
+
+\comando{relsObjeto}{Objeto}
+Muestra todas las relaciones de un objeto declaradas directamente o por herencia.
+\begin{args}
+    \item Objeto. Nombre del objeto a consultar.
+\end{args}
+
+\comando{relsClase}{Clase}
+Muestra todas las relaciones de una clase declaradas directamente o por herencia.
+\begin{args}
+    \item Clase. Nombre de la clase consultar.
+\end{args}
+\end{document}
+
 \subsection{Para agregar información}
 
 \comando{nuevaClase}{Nombre, Padre}

@@ -187,6 +187,24 @@ revisaDefaults([X:Y|T],[X:Y|R]) :-
 revisaDefaults([no(X:Y)|T],[no(X:Y)|R]) :-
 	eliminar(X:Y,T,C),
 	revisaDefaults(C,R),!.
+	
+revisaDefaults2([],[]).
+
+revisaDefaults2([not(X)|T],[not(X)|R]) :-
+	eliminar(X,T,C),
+	revisaDefaults2(C,R),!.
+
+revisaDefaults2([X=>Y|T],[X=>Y|R]) :-
+	eliminarTodos([not(X=>Y),X=>_],T,C),
+	revisaDefaults2(C,R),!.
+
+revisaDefaults2([not(X=>Y)|T],[not(X=>Y)|R]) :-
+	eliminar(X=>Y,T,C),
+	revisaDefaults2(C,R),!.
+
+revisaDefaults2([X|T],[X|R]) :-
+	eliminar(not(X),T,C),
+	revisaDefaults2(C,R),!.
 
 % Elimina de la primera lista todos los elementos que aparecen en la segunda.
 % Actúa como una resta de lista.

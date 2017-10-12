@@ -171,12 +171,79 @@ buscaAncestros(clase(Clase,Ancestro,_,_),KB,[Clase|R]):-
 	buscaAncestros(B,KB,R).
 	
 
-% Listados de propiedades y relaciones--------------------------
+% Lista de propiedades de un objeto--------------------------
+
+propiedadesObjeto(Objeto,KB,Props):-
+	filtrar(objetoSeLlama(Objeto),KB,[Ob]),
+	propiedadesObjeto(Ob,Props).
 
 propiedadesObjeto(objeto(_,_,Props,_),Props).
 
+claseDeUnObjeto(objeto(_,Clase,_,_),Clase).
+
+propiedadesObjetoHerencia(Objeto,KB,Resultado):-
+	filtrar(objetoSeLlama(Objeto),KB,[Ob]),
+	propiedadesObjeto(Objeto,KB,Props),
+	claseDeUnObjeto(Ob,ClaseOb),
+	propiedadesClaseHerencia(ClaseOb,KB,Lis),
+	concatena(Props,Lis,Lis2),
+	revisaDefaults2(Lis2,Resultado).
+	
+
+% Lista de propiedades de una clase-----------------------
+
+propiedadesClase(Clase,KB,Props):-
+	buscar(clase(Clase,_,_,_),KB,Cl),
+	propiedadesClase(Cl,Props).
+
 propiedadesClase(clase(_,_,Props,_),Props).
+
+propiedadesClaseLista([],_,[]).
+propiedadesClaseLista([H|T],KB,Salida):-
+	propiedadesClase(H,KB,Props),
+	propiedadesClaseLista(T,KB,S),
+	concatena(Props,S,Salida),!.
+	
+
+propiedadesClaseHerencia(Clase,KB,Resultado):-
+	buscar(clase(Clase,_,_,_),KB,Cl),
+	buscaAncestros(Cl,KB,Anc),
+	propiedadesClaseLista(Anc,KB,ListaProps),
+	revisaDefaults2(ListaProps,Resultado).
+
+% Lista de relaciones de un objeto---------------------
+
+relacionesObjeto(Objeto,KB,Rels):-
+	filtrar(objetoSeLlama(Objeto),KB,[Ob]),
+	relacionesObjeto(Ob,Rels).
 
 relacionesObjeto(objeto(_,_,_,Rels),Rels).
 
+relacionesObjetoHerencia(Objeto,KB,Resultado):-
+	filtrar(objetoSeLlama(Objeto),KB,[Ob]),
+	relacionesObjeto(Objeto,KB,Rels),
+	claseDeUnObjeto(Ob,ClaseOb),
+	relacionesClaseHerencia(ClaseOb,KB,Lis),
+	concatena(Rels,Lis,Lis2),
+	revisaDefaults2(Lis2,Resultado).
+
+% Lista de relaciones de una clase
+
+relacionesClase(Clase,KB,Rels):-
+	buscar(clase(Clase,_,_,_),KB,Cl),
+	relacionesClase(Cl,Rels).
+
 relacionesClase(clase(_,_,_,Rels),Rels).
+
+relacionesClaseLista([],_,[]).
+relacionesClaseLista([H|T],KB,Salida):-
+	relacionesClase(H,KB,Rels),
+	relacionesClaseLista(T,KB,S),
+	concatena(Rels,S,Salida),!.
+	
+
+relacionesClaseHerencia(Clase,KB,Resultado):-
+	buscar(clase(Clase,_,_,_),KB,Cl),
+	buscaAncestros(Cl,KB,Anc),
+	relacionesClaseLista(Anc,KB,ListaRels),
+	revisaDefaults2(ListaRels,Resultado).

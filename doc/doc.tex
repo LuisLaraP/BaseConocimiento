@@ -165,6 +165,87 @@ Elimina una relación de todos los objetos con el nombre especificado. La relaci
     \item Objetivo. Clase u objeto con el cual se tiene la relación a eliminar.
 \end{args}
 
+\subsection{Modificar información}
+
+\comando{modificarNombreClase}{AntiguoNombre, NuevoNombre}
+Modifica el nombre de una Clase. Si el nuevo nombre existe en la base de datos el nombre no se modifica para evitar clases con el mismo nombre. El cambio de nombre se actualiza en las relaciones que puedan existir con otras clases y objetos.
+\begin{args}
+\item AntiguoNombre. El nombre de la clase a se va a cambiar.
+\item NuevoNomnbre. El nuevo nombre de la clase.
+\end{args}
+
+\comando{modificarNombreObjeto}{AntiguoNombre, NuevoNombre}
+Modifica el nombre de un Objeto. El cambio de nombre se actualiza en las relaciones que puedan existir con otras clases y objetos.
+\begin{args}
+\item AntiguoNombre. El nombre del objeto que se va a cambiar.
+\item NuevoNombre. El nuevo nombre del objeto.
+\end{args}
+
+\comando{modificarPropiedad}{Nombre, Propiedad, NuevoValor}
+Modifica el valor de una propiedad de una clase u objeto, no es necesario especificar el valor actual  de la propiedad en caso de tenerlo.
+\begin{args}
+\item Nombre. El nombre de la clase u objeto cuya propiedad será modificada.
+\item Propiedad. El nombre de la propiedad que será modificada.
+\item NuevoValor. El nuevo valor de la propiedad.
+\end{args}
+
+\comando{modificarPropiedad}{Nombre, Propiedad, Valor, NuevoValor}
+Modifica el valor de una propiedad de una clase u objeto, se puede especificar el valor actual de la porpiedad en caso de que existan más propiedades con el mismo nombre.
+\begin{args}
+\item Nombre. El nombre de la clase u objeto cuya propiedad será modificada.
+\item Propiedad. El nombre de la propiedad que será modificada.
+\item Valor. El valor actual en la base de datos de la propiedad.
+\item NuevoValor. El nuevo valor de la propiedad.
+\end{args}
+
+\comando{modificarRelacion}{Nombre, Relacion, NuevoValor}
+Modifica el valor de una relacion de una clase u objeto, no es necesario especificar el valor actual de la relacion.
+\begin{args}
+\item Nombre. El nombre de la clase u objeto cuya relación será modificada.
+\item Propiedad. El nombre de la relación que será modificada.
+\item NuevoValor. El nuevo valor de la relación.
+\end{args}
+
+\comando{modificarRelacion}{Nombre, Relacion, Valor, NuevoValor}
+Modifica el valor de la relación de una clase u objeto, se puede especificar el valor actual de la relacion en caso de que existan más relaciones con el mismo nombre.
+\begin{args}
+\item Nombre. El nombre de la clase u objeto cuya relación será modificada.
+\item Propiedad. El nombre de la relación que será modificada.
+\item Valor. El valor actual de la relación.
+\item NuevoValor. El nuevo valor de la relación.
+\end{args}
+
+\comando{negarPropiedad}{Nombre, Propiedad}
+Niega la propiedad de la calse u objeto especificado.
+\begin{args}
+\item Nombre. El nombre de la clase u objeto que será modificado.
+\item Propiedad. La propiedad que será negada.
+\end{args}
+
+\comando{negarPropiedad}{Nombre, Propiedad, Valor}
+Niega la propiedad de la clase u objeto especifucado, se puede especificar el valor de la propiedad para evitar modificar distintas propiedades con el mismo nombre.
+\begin{args}
+\item Nombre. El nombre de la clase u objeto que será modificado.
+\item Propiedad. La propiedad que será negada.
+\item Valor. El valor actual de la propiedad.
+\end{args}
+
+\comando{negarRelacion}{Nombre, Relacion}
+Niega la relación de la clase u objeto especificado. 
+\begin{args}
+\item Nombre. El nombre de la clase u objeto que será modificado.
+\item Relación. La relación que será negada.
+\end{args}
+
+\comando{negarRelacion}{Nombre, Relacion, Valor}
+Niega la relación de la clase u objeto especificado, se puede especificar el valor de la relación para evitar modificar distintas relaciones con el mismo nombre.
+\begin{args}
+\item Nombre. El nombre de la clase u objeto que será modificado.
+\item Relación. La relación que será negada.
+\item Valor. El valor actual de la relación.
+\end{args}
+
+
 \subsection{Utilitarios}
 
 \comando{cargar}{Nombre}

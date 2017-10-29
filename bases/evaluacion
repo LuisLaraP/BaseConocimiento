@@ -1,0 +1,19 @@
+[
+clase(top,nil,[],[]),
+clase(animal,top,[],[]),
+clase(machine,top,[],[]),
+clase(mammal,animal,[has_legs,not(can_fly)],[]),
+clase(toy,machine,[],[]),
+clase(mouse,mammal,[],[]),
+clase(whale,mammal,[not(has_legs)],[]),
+clase(elephant,mammal,[],[hate=>mouse]),
+clase(human,mammal,[],[hate=>monstro]),
+objeto(['Mrs Jumbo'],elephant,[],[]),
+objeto([mickey],mouse,[],[]),
+objeto([timothy],mouse,[],[]),
+objeto([monstro],whale,[],[hate=>human]),
+objeto([dumbo],elephant,[can_fly],[hate=>'the ringmaster']),
+objeto(['the ringmaster'],human,[],[]),
+objeto([gepeto],human,[],[inside=>monstro]),
+objeto([pinocchio],toy,[],[])
+].

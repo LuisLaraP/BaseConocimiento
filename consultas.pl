@@ -57,106 +57,7 @@ auxiliarExtensionClase([H|T],KB,R):-
 	obClase(H,KB,O),
 	auxiliarExtensionClase(T,KB,P),
 	concatena(O,P,R).
-
-% Extension de una propiedad---------------------------------------------
-
-% Obtiene la lista de clases que cumplen una propiedad
-listPropClas(_,[],[]).
-listPropClas(Prop,[clase(Nom,_,L,_)|TB],LR) :-
-	listPropAux(Prop,Nom,L,S),
-        concatena(S,TR,LR),
-	listPropClas(Prop,TB,TR),!.
-listPropClas(Prop,[_|TB],LR) :-
-	listPropClas(Prop,TB,LR).
-
-% Obtinene la lista de objetos que cumplen una propiedad
-listPropObj(_,[],[]).
-listPropObj(Prop,[objeto(Nom,_,L,_)|TB],LR) :-
-	listPropAux(Prop,Nom,L,S),
-        concatena(S,TR,LR),
-	listPropObj(Prop,TB,TR),!.
-listPropObj(Prop,[_|TB],LR) :-
-	listPropObj(Prop,TB,LR).
-
-% Verifica si una clase u objeto en particular tiene una propiedad
-listPropAux(_,_,[],[]).
-listPropAux(Prop,Nom,[Prop|T],[Nom:si|R]) :-
-	listPropAux(Prop,Nom,T,R),!.
-listPropAux(Prop,Nom,[not(Prop)|T],[Nom:no|R]) :-
-	listPropAux(Prop,Nom,T,R),!.
-listPropAux(Prop,Nom,[Prop=>X|T],[Nom:X|R]) :-
-	listPropAux(Prop,Nom,T,R),!.
-listPropAux(Prop,Nom,[not(Prop=>X)|T],[no(Nom:X)|R]) :-
-	listPropAux(Prop,Nom,T,R),!.
-listPropAux(Prop,Nom,[_|T],R) :-
-	listPropAux(Prop,Nom,T,R),!.
-
-% Revisa las clases que cumplen una propiedad o relación bajo herencia
-propHer(_,[],[]).
-propHer(KB,[Clase:si|R],L) :-
-       extensionClase(Clase,KB,S),
-       ponSi(S,S1),
-       propHer(KB,R,P),
-       actualiza(P,S1,L),!.
-propHer(KB,[Clase:no|R],L) :-
-       extensionClase(Clase,KB,S),
-       ponNo(S,S1),
-       propHer(KB,R,P),
-       actualiza(P,S1,L),!.
-propHer(KB,[Clase:X|R],L) :-
-       extensionClase(Clase,KB,S),
-       ponClase(S,X,S1),
-       propHer(KB,R,P),
-       actualiza(P,S1,L),!.
-propHer(KB,[no(Clase:X)|R],L) :-
-       extensionClase(Clase,KB,S),
-       ponClaseNo(S,X,S1),
-       propHer(KB,R,P),
-       actualiza(P,S1,L),!.
-
-eProp(Prop,KB,L) :-
-	listPropObj(Prop,KB,R1),
-	listPropClas(Prop,KB,R2),
-	propHer(KB,R2,R3),
-	concatena(R1,R3,R4),
-	revisaDefaults(R4,L).
-
-% Extensión de una relación--------------------------------------------
-
-% Obtiene la lista de clases que cumplen una relación
-listRelClas(_,[],[]).
-listRelClas(Rel,[clase(Nom,_,_,L)|TB],LR) :-
-	listRelAux(Rel,Nom,L,S),
-        concatena(S,TR,LR),
-	listRelClas(Rel,TB,TR),!.
-listRelClas(Rel,[_|TB],LR) :-
-	listRelClas(Rel,TB,LR).
-
-% Obtinene la lista de objetos que cumplen una relación
-listRelObj(_,[],[]).
-listRelObj(Rel,[objeto(Nom,_,_,L)|TB],LR) :-
-	listRelAux(Rel,Nom,L,S),
-        concatena(S,TR,LR),
-	listRelObj(Rel,TB,TR),!.
-listRelObj(Rel,[_|TB],LR) :-
-	listRelObj(Rel,TB,LR).
-
-% Verifica si una clase u objeto en particular tiene una relación
-listRelAux(_,_,[],[]).
-listRelAux(Rel,Nom,[Rel=>X|T],[Nom:X|R]) :-
-	listPropAux(Rel,Nom,T,R),!.
-listRelAux(Rel,Nom,[not(Rel=>X)|T],[no(Nom:X)|R]) :-
-	listPropAux(Rel,Nom,T,R),!.
-listRelAux(Rel,Nom,[_|T],R) :-
-	listPropAux(Rel,Nom,T,R),!.
-
-eRel(Rel,KB,L) :-
-	listRelObj(Rel,KB,R1),
-	listRelClas(Rel,KB,R2),
-	propHer(KB,R2,R3),
-	concatena(R1,R3,R4),
-	revisaDefaults(R4,L).
-
+	
 
 % Clases a las que pertenece un objeto-----------------------------
 
@@ -187,7 +88,7 @@ propiedadesObjetoHerencia(Objeto,KB,Resultado):-
 	claseDeUnObjeto(Ob,ClaseOb),
 	propiedadesClaseHerencia(ClaseOb,KB,Lis),
 	concatena(Props,Lis,Lis2),
-	revisaDefaults2(Lis2,Resultado).
+	revisaDefaultsProps(Lis2,Resultado).
 	
 
 % Lista de propiedades de una clase-----------------------
@@ -209,7 +110,7 @@ propiedadesClaseHerencia(Clase,KB,Resultado):-
 	buscar(clase(Clase,_,_,_),KB,Cl),
 	buscaAncestros(Cl,KB,Anc),
 	propiedadesClaseLista(Anc,KB,ListaProps),
-	revisaDefaults2(ListaProps,Resultado).
+	revisaDefaultsProps(ListaProps,Resultado).
 
 % Lista de relaciones de un objeto---------------------
 
@@ -225,7 +126,7 @@ relacionesObjetoHerencia(Objeto,KB,Resultado):-
 	claseDeUnObjeto(Ob,ClaseOb),
 	relacionesClaseHerencia(ClaseOb,KB,Lis),
 	concatena(Rels,Lis,Lis2),
-	revisaDefaults2(Lis2,Resultado).
+	revisaDefaultsRels(Lis2,Resultado).
 
 % Lista de relaciones de una clase
 
@@ -246,4 +147,65 @@ relacionesClaseHerencia(Clase,KB,Resultado):-
 	buscar(clase(Clase,_,_,_),KB,Cl),
 	buscaAncestros(Cl,KB,Anc),
 	relacionesClaseLista(Anc,KB,ListaRels),
-	revisaDefaults2(ListaRels,Resultado).
+	revisaDefaultsRels(ListaRels,Resultado).
+	
+% Extension de una propiedad---------------------------------------------
+
+listPropAux(_,_,[],[]).
+listPropAux(Prop,Nom,[Prop|T],[Nom:si|R]) :-
+	listPropAux(Prop,Nom,T,R),!.
+listPropAux(Prop,Nom,[not(Prop)|T],[Nom:no|R]) :-
+	listPropAux(Prop,Nom,T,R),!.
+listPropAux(Prop,Nom,[Prop=>X|T],[Nom:X|R]) :-
+	listPropAux(Prop,Nom,T,R),!.
+listPropAux(Prop,Nom,[not(Prop=>X)|T],[not(Nom:X)|R]) :-
+	listPropAux(Prop,Nom,T,R),!.
+listPropAux(Prop,Nom,[_|T],R) :-
+	listPropAux(Prop,Nom,T,R),!.
+
+
+limpiaL([],[]).
+limpiaL([[X]|T],[X|L]) :-
+	limpiaL(T,L),!.
+limpiaL([[]|T],L) :-
+	limpiaL(T,L),!.
+limpiaL([X|T],[X|L]) :-
+	limpiaL(T,L).
+
+
+extensionPropiedad(_,_,[],[]).
+extensionPropiedad(Prop,KB,[objeto(Nom,_,_,_)|TB],[V|LR]) :-
+	propiedadesObjetoHerencia(Nom,KB,R),
+	listPropAux(Prop,Nom,R,V),
+	extensionPropiedad(Prop,KB,TB,LR),!.
+extensionPropiedad(Prop,KB,[_|TB],LR) :-
+			extensionPropiedad(Prop,KB,TB,LR).
+
+			   
+eProp(Prop,KB,R) :-
+	extensionPropiedad(Prop,KB,KB,Prev),
+	limpiaL(Prev,R).
+
+% Extensión de una relación--------------------------------------------
+
+listRelAux(_,_,[],[]).
+listRelAux(Rel,Nom,[Rel=>X|T],[Nom:X|R]) :-
+	listRelAux(Rel,Nom,T,R),!.
+listRelAux(Rel,Nom,[not(Rel=>X)|T],[not(Nom:X)|R]) :-
+	listRelAux(Rel,Nom,T,R),!.
+listRelAux(Rel,Nom,[_|T],R) :-
+	listRelAux(Rel,Nom,T,R),!.
+
+
+extensionRelacion(_,_,[],[]).
+extensionRelacion(Rel,KB,[objeto(Nom,_,_,_)|TB],[V|LR]) :-
+	relacionesObjetoHerencia(Nom,KB,R),
+	listRelAux(Rel,Nom,R,V),
+	extensionRelacion(Rel,KB,TB,LR),!.
+extensionRelacion(Rel,KB,[_|TB],LR) :-
+			extensionRelacion(Rel,KB,TB,LR).
+
+			   
+eRel(Rel,KB,R) :-
+	extensionRelacion(Rel,KB,KB,Prev),
+	limpiaL(Prev,R).
